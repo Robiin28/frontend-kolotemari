@@ -19,6 +19,7 @@ export const MyHome = () => {
   return (
     <div className="home-container">
       <div className="headHome">
+      <h1>Fuck vercel </h1>
         <h1>BE BETTER <br />LEARN BETTER</h1>
       </div>
       <div className="headImage">
