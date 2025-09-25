@@ -2,9 +2,10 @@ import axios from "axios";
 import { Navigate } from "react-router-dom"; // Import Navigate for redirection (or use your router method)
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "https://kolo-temari-backend-service.onrender.com/api/", // Use environment variable
+  baseURL: process.env.REACT_APP_API_URL || "https://backend-kolotemari-1.onrender.com/api/", // Use environment variable
   withCredentials: true, // Allow cookies to be sent with requests if needed
 });
+
 
 // Attach the token to every request
 axiosInstance.interceptors.request.use(
