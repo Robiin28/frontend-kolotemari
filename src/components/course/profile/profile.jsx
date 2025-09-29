@@ -60,15 +60,22 @@ export const Profile = () => {
     }
   }, []);
 
-  const fetchUserInfo = async (userId) => {
-    try {
-      const response = await axiosInstance.get(`auth/me`);
-      setUser(response.data.data.user);
-      setImage(response.data.data.user.pic || image); // Update image with user pic
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-    }
-  };
+ const fetchUserInfo = async () => {
+  try {
+    const response = await axiosInstance.get("auth/me");
+    setUser(response.data.data.user);
+    setImage(response.data.data.user.pic || image); // Update image with user pic
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+    toast({
+      title: "Failed to fetch user info.",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+  }
+};
+
 
   const handleImageUpload = (e) => {
     const { name, files } = e.target;
@@ -120,8 +127,7 @@ export const Profile = () => {
 
                 // Now send a request to update the user's profile pic
                 try {
-                    const response = await axios.patch(
-                        "https://kolo-temari-backend-service.onrender.com/api/auth/updateMe",
+                   const response = await axiosInstance.patch("auth/updateMe",
                         { pic: url }, // Update the pic field with the new URL
                         { withCredentials: true }
                     );
@@ -142,40 +148,33 @@ export const Profile = () => {
 };
 
   const handleProfileSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.patch("https://kolo-temari-backend-service.onrender.com/api/auth/updateMe", {
-        name: user.name,
-        email: user.email,
-        bio: user.bio,
-      }, { withCredentials: true });
-      
-      if (response.status === 200) {
-        toast({
-          title: "Profile updated successfully!",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Failed to update profile.",
-        description: error.response?.data?.message || "An error occurred.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+  e.preventDefault();
+  try {
+    const response = await axiosInstance.patch("auth/updateMe", {
+      name: user.name,
+      email: user.email,
+      bio: user.bio,
+    });
+    if (response.status === 200) {
+      toast({ title: "Profile updated successfully!", status: "success", duration: 3000, isClosable: true });
     }
-  };
+  } catch (error) {
+    toast({
+      title: "Failed to update profile.",
+      description: error.response?.data?.message || "An error occurred.",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+  }
+};
 
   const handleSecuritySubmit = async (e) => {
     e.preventDefault();
 
     if (securityDetails.newPassword === securityDetails.confirmPassword) {
       try {
-        const response = await axios.patch("https://kolo-temari-backend-service.onrender.com/api/auth/updatePassword", {
+        const response = await axiosInstance.patch("https://backend-kolotemari-1.onrender.com/api/auth/updatePassword", {
           currentPassword: securityDetails.currentPassword,
           confirmPassword: securityDetails.confirmPassword,
           password: securityDetails.newPassword,

@@ -13,6 +13,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import axios from 'axios';
 import { storage } from '../../Firebase';
+import axiosInstance from '../../utils/AxiosInstance';
 
 const CourseForm = ({ toggleForm, onSubmitSuccess }) => {
   const [courses, setCourses] = useState([]);
@@ -134,9 +135,9 @@ const CourseForm = ({ toggleForm, onSubmitSuccess }) => {
 
       let response;
       if (editingCourseId) {
-        response = await axios.put(`https://kolo-temari-backend-service.onrender.com/api/courses/${editingCourseId}`, courseData,{withCredentials:true});
+        response = await axiosInstance.put(`https://backend-kolotemari-1.onrender.com/api/courses/${editingCourseId}`, courseData,{withCredentials:true});
       } else {
-        response = await axios.post('https://kolo-temari-backend-service.onrender.com/api/courses', courseData,{withCredentials:true});
+        response = await axiosInstance.post('https://backend-kolotemari-1.onrender.com/api/courses', courseData,{withCredentials:true});
       }
 
       if (response.status === 200 || response.status === 201) {

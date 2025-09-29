@@ -20,6 +20,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CheckCircleIcon } from "@chakra-ui/icons";
+import axiosInstance from "../../../utils/AxiosInstance";
 
 const CourseDetail = () => {
   const location = useLocation();
@@ -36,7 +37,7 @@ const CourseDetail = () => {
   useEffect(() => {
     const fetchSections = async () => {
       try {
-        const response = await axios.get(`https://backend-kolotemari-1.onrender.com/api/course/${courseId}/section`, { withCredentials: true });
+        const response = await axiosInstance.get(`https://backend-kolotemari-1.onrender.com/api/course/${courseId}/section`, { withCredentials: true });
        
         if (response.data.status === "success") {
           setSections(response.data.data.sections);
@@ -149,14 +150,21 @@ const CourseDetail = () => {
         )}
 
         {/* Start/Continue Button */}
-        <Button
-          colorScheme="orange"
-          mt={4}
-          onClick={() => handleLessonClick(sections[0].lessons[0], sections[0])} // Start from the first section and lesson
-          width="full"
-        >
-          Start/Continue Course
-        </Button>
+      <Button
+  colorScheme="orange"
+  mt={4}
+  onClick={() => {
+    if (sections.length > 0 && sections[0].lessons && sections[0].lessons.length > 0) {
+      handleLessonClick(sections[0].lessons[0], sections[0]);
+    } else {
+      alert("No lessons available yet!");
+    }
+  }}
+  width="full"
+>
+  Start/Continue Course
+</Button>
+
       </Box>
 
       {/* Additional Resources */}

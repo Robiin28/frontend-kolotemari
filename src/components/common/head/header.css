@@ -72,7 +72,7 @@ header .flexSB{
   z-index: 1;
 }
 .start {
-  background-color: #ad5106;
+  background-color:  rgb(181, 108, 5);;
   padding: 30px 70px;
   color: var(--white);
   border-radius: 0 0 60px;

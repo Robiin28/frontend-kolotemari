@@ -27,6 +27,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import SectionDetails from './SectionDetail'; // Import the SectionDetails component
+import axiosInstance from '../../utils/AxiosInstance';
 
 const CourseDetails = ({ course, goBack }) => {
   const [sections, setSections] = useState([]);
@@ -41,7 +42,7 @@ const CourseDetails = ({ course, goBack }) => {
   // Fetch sections for the course
   const fetchData = async () => {
     try {
-      const response = await axios.get(`https://kolo-temari-backend-service.onrender.com/api/course/${course._id}/section`, { withCredentials: true });
+      const response = await axiosInstance.get(`https://backend-kolotemari-1.onrender.com/api/course/${course._id}/section`, { withCredentials: true });
       if (response.data.status === 'success') {
         const sortedSections = (response.data.data.sections || []).sort((a, b) => a.order - b.order);
         setSections(sortedSections); // Ensure sections are always sorted
@@ -72,7 +73,7 @@ const CourseDetails = ({ course, goBack }) => {
         order: sectionOrder,
         courseId: course._id, // Pass courseId to the section
       };
-      const response = await axios.post(`https://kolo-temari-backend-service.onrender.com/api/course/${course._id}/section`, newSection, { withCredentials: true });
+      const response = await axiosInstance.post(`https://backend-kolotemari-1.onrender.com/api/course/${course._id}/section`, newSection, { withCredentials: true });
       if (response.data.status === 'success') {
         setSections((prevSections) => {
           const updatedSections = [...prevSections, response.data.data];

@@ -56,29 +56,32 @@ export const Header = () => {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await axiosInstance.post("auth/logout");
-      Cookies.remove("authToken");
-      setIsLoggedIn(false);
-      toast({
-        title: "Logged out",
-        description: "You have been logged out successfully.",
-        status: "info",
-        duration: 3000,
-        isClosable: true,
-      });
-      navigate("/");
-    } catch (error) {
-      toast({
-        title: "Logout failed",
-        description: error.response?.data?.message || "An error occurred during logout.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
+const handleLogout = async () => {
+  try {
+    await axiosInstance.post("/auth/logout"); // invalidate token server-side
+    Cookies.remove("authToken");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userRole"); // clear any cached role
+    setIsLoggedIn(false);
+    toast({
+      title: "Logged out",
+      description: "You have been logged out successfully.",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+    });
+    navigate("/", { replace: true });
+  } catch (err) {
+    toast({
+      title: "Logout failed",
+      description: err.response?.data?.message || "Error during logout",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+  }
+};
+
 
   const SearchBar = () => (
     <InputGroup
@@ -135,7 +138,7 @@ export const Header = () => {
                   variant="solid"
                   colorScheme="orange"
                   style={{
-                    backgroundColor: "#C65D0D",
+                    backgroundColor: " rgb(181, 108, 5);",
                     color: "white",
                     position: "absolute",
                     top: "4px",
@@ -210,9 +213,17 @@ export const Header = () => {
             <li>
               <Link to="/price">Pricing</Link>
             </li>
-            <li>
-              <Link to="/land">Learn</Link>
-            </li>
+           <li>
+  <Link
+    to="/land"
+    onClick={(e) => {
+      e.preventDefault(); // Stop full page reload
+      navigate("/land");  // Use client-side navigation
+    }}
+  >
+    Learn
+  </Link>
+</li>
             <li>
               <Link to="/contact">Contact</Link>
             </li>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
+import axiosInstance from '../../../utils/AxiosInstance';
 
 export const LessonTable = () => {
   const { sectionId } = useParams();
@@ -16,7 +17,7 @@ export const LessonTable = () => {
     const fetchLessons = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://kolo-temari-backend-service.onrender.com/api/courses/${data}/${sectionId}/lessons`,{withCredentials:true}); // Adjusted endpoint to use courseId
+        const response = await axiosInstance.get(`https://backend-kolotemari-1.onrender.com/api/courses/${data}/${sectionId}/lessons`,{withCredentials:true}); // Adjusted endpoint to use courseId
         // Simulating a delay for demonstration
         await new Promise(resolve => setTimeout(resolve, 1000));
         if (response.data.status === 'success') {

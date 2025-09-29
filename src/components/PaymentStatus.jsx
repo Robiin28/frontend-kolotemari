@@ -3,6 +3,7 @@ import { Box, Button, Heading, Text, Spinner, useToast, Flex } from '@chakra-ui/
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { HiCreditCard } from 'react-icons/hi'; // Payment icon
+import axiosInstance from '../utils/AxiosInstance';
 
 const PaymentStatus = () => {
   const location = useLocation();
@@ -18,7 +19,7 @@ const PaymentStatus = () => {
   const handleVerifyPayment = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('https://kolo-temari-backend-service.onrender.com/api/payments/success', {
+      const response = await axiosInstance.post('https://backend-kolotemari-1.onrender.com/api/payments/success', {
         tx_ref,
       }, { withCredentials: true });
 

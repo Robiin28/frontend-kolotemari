@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import axiosInstance from "../../utils/AxiosInstance";
 
 export const TeamCardHome = () => {
   const [instructors, setInstructors] = useState([]); // State for storing instructors
@@ -10,7 +11,7 @@ export const TeamCardHome = () => {
   useEffect(() => {
     const fetchInstructors = async () => {
       try {
-        const response = await axios.get("https://kolo-temari-backend-service.onrender.com/api/auth/users/instructor"); // Replace with your API endpoint
+        const response = await axiosInstance.get("https://backend-kolotemari-1.onrender.com/api/auth/users/instructor"); // Replace with your API endpoint
         if (response.data && response.data.status === 'success') {
           // Filter instructors from the response
           const filteredInstructors = response.data.data.users;

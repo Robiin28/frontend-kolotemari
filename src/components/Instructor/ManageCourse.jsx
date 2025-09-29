@@ -20,6 +20,7 @@ import {
 import { AddIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import CourseForm from './CourseForm';
 import CourseDetails from './CourseDetails.';
+import axiosInstance from '../../utils/AxiosInstance';
 
 const ManageCourses = () => {
   const [showCourseForm, setShowCourseForm] = useState(false);
@@ -34,7 +35,7 @@ const ManageCourses = () => {
   const fetchCourses = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://kolo-temari-backend-service.onrender.com/api/courses', { withCredentials: true });
+      const response = await axiosInstance.get('https://backend-kolotemari-1.onrender.com/api/courses', { withCredentials: true });
       if (response.data.status === 'success') {
         setCourses(response.data.data.courses);
       } else {

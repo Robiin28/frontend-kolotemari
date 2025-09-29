@@ -6,6 +6,7 @@ import {
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import axiosInstance from '../utils/AxiosInstance';
 
 const PaymentPage = () => {
   const location = useLocation();
@@ -26,7 +27,7 @@ const PaymentPage = () => {
   useEffect(() => {
     const fetchConversionRates = async () => {
       try {
-        const response = await axios.get('https://v6.exchangerate-api.com/v6/2122fbe8c44a46159fdd0ee0/latest/USD');
+        const response = await axiosInstance.get('https://v6.exchangerate-api.com/v6/2122fbe8c44a46159fdd0ee0/latest/USD');
         setConversionRates(response.data.conversion_rates);
       } catch (error) {
         console.error('Error fetching conversion rates:', error);
@@ -58,7 +59,7 @@ const PaymentPage = () => {
     };
 
     try {
-      const response = await axios.post('https://kolo-temari-backend-service.onrender.com/api/payments', paymentData, {
+      const response = await axiosInstance.post('https://backend-kolotemari-1.onrender.com/api/payments', paymentData, {
         withCredentials: true,
       });
       if (response.data.success) {

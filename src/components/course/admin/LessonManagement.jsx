@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 import './courseManagement.css';
 import Modal from './Modal';
+import axiosInstance from '../../../utils/AxiosInstance';
 
 const LessonManagement = () => {
   const [courses, setCourses] = useState([]);
@@ -21,7 +22,7 @@ const LessonManagement = () => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('https://kolo-temari-backend-service.onrender.com/api/courses',{withCredentials:true});
+        const response = await axiosInstance.get('https://backend-kolotemari-1.onrender.com/api/courses',{withCredentials:true});
         await new Promise(resolve => setTimeout(resolve, 1000)); // 1-second delay
         if (response.data.status === 'success') {
           setCourses(response.data.data.courses);
@@ -46,7 +47,7 @@ const LessonManagement = () => {
   const handleRowClick = async (courseId) => {
     setLoading(true);
     try {
-      const fetch = await axios.get(`https://kolo-temari-backend-service.onrender.com/api/course/${courseId}/section`,{withCredentials:true});
+      const fetch = await axiosInstance.get(`https://backend-kolotemari-1.onrender.com/api/course/${courseId}/section`,{withCredentials:true});
       await new Promise(resolve => setTimeout(resolve, 1000));
       if (fetch.data.status === 'success') {
         setSection(fetch.data.data.sections);

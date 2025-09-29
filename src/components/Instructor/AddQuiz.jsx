@@ -24,6 +24,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from '../../Firebase';
+import axiosInstance from '../../utils/AxiosInstance';
 
 const AddQuiz = ({ lessonId, onClose }) => {
   const [quizTitle, setQuizTitle] = useState('');
@@ -127,7 +128,7 @@ const AddQuiz = ({ lessonId, onClose }) => {
           
         })),
       };
-      const response = await axios.post(`https://kolo-temari-backend-service.onrender.com/api/course/lesson/${lessonId}/quiz`, formData,{withCredentials: true});
+      const response = await axiosInstance.post(`https://backend-kolotemari-1.onrender.com/api/course/lesson/${lessonId}/quiz`, formData,{withCredentials: true});
   
       if (response.data.status === 'success') {
         toast({

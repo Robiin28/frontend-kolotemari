@@ -19,7 +19,7 @@ export const MyHome = () => {
   return (
     <div className="home-container">
       <div className="headHome">
-      <h1>Fuck vercel </h1>
+      
         <h1>BE BETTER <br />LEARN BETTER</h1>
       </div>
       <div className="headImage">
@@ -31,14 +31,15 @@ export const MyHome = () => {
         <div className="container">
           <div className="row">
             <p></p>
-            <div className="button-group">
+            <div className="button-group 2">
               <Button 
                 onClick={handleEnrollNow} // Set onClick handler
                 bg="white" // White background
-                color="orange.600" // Orange text color
+                color=" rgb(181, 108, 5);" // Orange text color
                 size="lg" // Large size
-                padding="26px 42px" // Increased padding for larger button
-                ml={4} // Left margin for spacing
+                fontWeight={650}
+               padding="26px 42px" // Increased padding for larger button
+                ml={18} // Left margin for spacing
                 borderRadius="10px 0 0 30px" // Curve left side
                 rightIcon={<i className="fa fa-long-arrow-alt-right"></i>}
               >
@@ -46,11 +47,11 @@ export const MyHome = () => {
               </Button>
               <Button 
                 onClick={handleViewCourse} // Set onClick handler
-                bg="orange.600" // Orange background
+                bg=" rgb(181, 108, 5);" // Orange background
                 color="white" // White text color
                 size="lg" // Large size
                 padding="26px 42px" // Increased padding for larger button
-                ml={4} // Left margin for spacing
+                ml={12} // Left margin for spacing
                 borderRadius="0 10px 30px 0" // Curve right side
                 rightIcon={<i className="fa fa-long-arrow-alt-right"></i>}
               >

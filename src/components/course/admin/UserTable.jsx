@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Modal from './Modal';
+import axiosInstance from "../../../utils/AxiosInstance";
 
 const UserTable = ({ role = 'student', onUpdate, onDelete }) => {
     // useState
@@ -13,7 +14,7 @@ const UserTable = ({ role = 'student', onUpdate, onDelete }) => {
     const fetchData = async () => {
         try {
             setLoad(true);
-            const response = await axios.get(`https://kolo-temari-backend-service.onrender.com/api/auth/users/${role}`,{withCredentials:true});
+            const response = await axiosInstance.get(`https://backend-kolotemari-1.onrender.com/api/auth/users/${role}`,{withCredentials:true});
             if (response.data.status === 'success') {
                 setData(response.data.data.users);
             } else {
@@ -32,7 +33,7 @@ const UserTable = ({ role = 'student', onUpdate, onDelete }) => {
 
     const handleDeleteUser = async (id) => {
         try {
-            const response = await axios.delete(`https://kolo-temari-backend-service.onrender.com/api/auth/deleteUser/${id}`,{withCredentials:true});
+            const response = await axiosInstance.delete(`https://backend-kolotemari-1.onrender.com/api/auth/deleteUser/${id}`,{withCredentials:true});
             if (response.status === 204) {
                 fetchData();
                 alert('Successfully deleted');

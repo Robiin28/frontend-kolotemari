@@ -7,6 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import React Quill's styles
+import axiosInstance from '../../utils/AxiosInstance';
 
 const AddLessonForm = ({ section, onAddLesson, onCancel }) => {
   const [step, setStep] = useState(1);
@@ -131,7 +132,7 @@ const AddLessonForm = ({ section, onAddLesson, onCancel }) => {
       console.log("Lesson Data to be submitted:", lessonData);
   
       // Submit lesson data
-      const response = await axios.post(`https://kolo-temari-backend-service.onrender.com/api/courses/${section.courseId}/sections/${section._id}/lessons`, lessonData, { withCredentials: true });
+      const response = await axiosInstance.post(`https://backend-kolotemari-1.onrender.com/api/courses/${section.courseId}/sections/${section._id}/lessons`, lessonData, { withCredentials: true });
       if (response.data.status === 'success') {
         toast({ title: 'Lesson added successfully', status: 'success' });
         onAddLesson(response.data.data.lesson);

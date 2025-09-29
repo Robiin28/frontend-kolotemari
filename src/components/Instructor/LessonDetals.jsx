@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import AddQuiz from './AddQuiz'; // Import the AddQuiz component
+import axiosInstance from '../../utils/AxiosInstance';
 
 const LessonDetails = ({ lesson, goBack }) => {
   const [editLesson, setEditLesson] = useState(false);
@@ -27,7 +28,7 @@ const LessonDetails = ({ lesson, goBack }) => {
   const handleUpdateLesson = async () => {
     setLoading(true);
     try {
-      const response = await axios.put(`https://kolo-temari-backend-service.onrender.com/api/lessons/${lesson._id}`, { 
+      const response = await axiosInstance.put(`https://backend-kolotemari-1.onrender.com/api/lessons/${lesson._id}`, { 
         title: updatedTitle, 
         content: updatedContent 
       },{withCredentials: true});

@@ -3,6 +3,7 @@ import './cart.css';
 import { FaStar, FaDollarSign } from 'react-icons/fa';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import axiosInstance from '../../utils/AxiosInstance';
 
 export const Cart = () => {
   const [cart, setCart] = useState(null); // Store the entire cart object
@@ -28,23 +29,24 @@ export const Cart = () => {
 
   const totalPrice = cart ? cart.items.reduce((total, item) => total + item.price, 0) : 0;
 
-  useEffect(() => {
-    const fetchCartData = async () => {
-      try {
-        const response = await axios.get('https://kolo-temari-backend-service.onrender.com/api/cart/my', {
-          withCredentials: true
-        });
-        setCart(response.data.data.cart); // Set the whole cart
-      } catch (err) {
-        setError('Failed to fetch cart data.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+ useEffect(() => {
+  const fetchCartData = async () => {
+    setLoading(true);
+    try {
+      // Use relative URL with axiosInstance
+      const response = await axiosInstance.get('/cart/my');
+      setCart(response.data.data.cart); // Set the cart
+    } catch (err) {
+      console.error("Error fetching cart:", err);
+      setError(err.response?.data?.message || 'Failed to fetch cart data.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchCartData();
-  }, []);
+  fetchCartData();
+}, []);
+
 
   if (loading) {
     return <p>Loading your cart...</p>;

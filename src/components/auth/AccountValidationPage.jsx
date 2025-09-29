@@ -12,6 +12,7 @@
 
     import { useLocation, useNavigate } from "react-router-dom";
     import axios from "axios";
+import axiosInstance from "../../utils/AxiosInstance";
     const AccountValidationPage = () => {
     const [verificationCode, setVerificationCode] = useState(Array(8).fill(""));
     const [error, setError] = useState(null);
@@ -50,7 +51,7 @@
         const code = verificationCode.join(""); // Combine digits into a string
       console.log(code);
         try {
-        const response = await axios.post("https://kolo-temari-backend-service.onrender.com/api/auth/validateNow", {
+        const response = await axiosInstance.post("https://backend-kolotemari-1.onrender.com/api/auth/validateNow", {
             email:email, 
             validationNumber: code,
         });
@@ -70,7 +71,7 @@
 
     const handleSendCode = async () => {
         try {
-        await axios.post("https://kolo-temari-backend-service.onrender.com/api/auth/validate", {
+        await axiosInstance.post("https://backend-kolotemari-1.onrender.com/api/auth/validate", {
             email: email,
         },{withCredentials:true});
         setIsCodeSent(true);

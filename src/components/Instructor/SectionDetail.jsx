@@ -3,6 +3,7 @@ import { Box, Heading, Text, Spinner, Button, Flex, Stack } from '@chakra-ui/rea
 import axios from 'axios';
 import LessonDetails from './LessonDetals';
 import AddLessonForm from './AddLessonForm'; // Import your AddLessonForm component
+import axiosInstance from '../../utils/AxiosInstance';
 
 const SectionDetails = ({ section, goBack }) => {
   const [lessons, setLessons] = useState([]);
@@ -14,7 +15,7 @@ const SectionDetails = ({ section, goBack }) => {
   // Fetch lessons for the selected section
   const fetchLessons = async () => {
     try {
-      const response = await axios.get(`https://kolo-temari-backend-service.onrender.com/api/courses/${section.courseId}/sections/${section._id}/lessons`, { withCredentials: true });
+      const response = await axiosInstance.get(`https://backend-kolotemari-1.onrender.com/api/courses/${section.courseId}/sections/${section._id}/lessons`, { withCredentials: true });
       console.log(response.data); // Log response data to verify structure
       if (response.data.status === 'success') {
         const sortedLessons = response.data.data.lessons.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)); // Sort lessons by createdAt in ascending order

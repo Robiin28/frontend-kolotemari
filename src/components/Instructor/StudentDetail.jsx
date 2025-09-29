@@ -1,3 +1,5 @@
+import axiosInstance from "../../utils/AxiosInstance";
+
 const handleAddQuiz = async () => {
   setLoading(true);
   setUploadModalOpen(true);
@@ -16,7 +18,7 @@ const handleAddQuiz = async () => {
     };
 
     // Send form data to the backend
-    const response = await axios.post(`https://kolo-temari-backend-service.onrender.com/api/course/lesson/${lessonId}/quiz`, formData,{withCredentials: true,});
+    const response = await axiosInstance.post(`https://backend-kolotemari-1.onrender.com/api/course/lesson/${lessonId}/quiz`, formData,{withCredentials: true,});
 
     if (response.data.status === 'success') {
       toast({

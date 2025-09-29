@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Grid,
+  SimpleGrid,
   Image,
   Text,
   Button,
@@ -9,20 +9,22 @@ import {
   Heading,
   Stack,
   useToast,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
-import axios from "axios";
 import Cookies from "js-cookie";
+import axiosInstance from "../../utils/AxiosInstance";
 
 export const CourseTop = () => {
-  const [courses, setCourses] = useState([]); // Initialize as an empty array
-  const [loading, setLoading] = useState(true); // State for loading status
-  const [error, setError] = useState(null); // State for error handling
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State for user login status
-  const toast = useToast(); // Toast for notifications
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const toast = useToast();
+
   useEffect(() => {
     const token = Cookies.get("authToken");
-    
     if (token) {
       setIsLoggedIn(true);
       const tokenParts = token.split(".");
@@ -30,21 +32,23 @@ export const CourseTop = () => {
         try {
           const userData = JSON.parse(atob(tokenParts[1]));
           setUser(userData);
-        } catch (error) {
-          console.error("Error parsing user data:", error);
+        } catch {
+          // Ignore JSON parse errors
         }
       }
     }
   }, []);
-  // Fetch courses from the API
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("https://backend-kolotemari-1.onrender.com/api/courses");
-        if (response.data && response.data.status === 'success') {
+        const response = await axiosInstance.get(
+          "https://backend-kolotemari-1.onrender.com/api/courses"
+        );
+        if (response.data?.status === "success") {
           setCourses(response.data.data.courses);
         } else {
-          setError('Failed to fetch courses.');
+          setError("Failed to fetch courses.");
         }
       } catch (err) {
         setError(err.message);
@@ -52,16 +56,7 @@ export const CourseTop = () => {
         setLoading(false);
       }
     };
-
     fetchCourses();
-  }, []);
-
-  // Check if user is logged in
-  useEffect(() => {
-    const token = Cookies.get("authToken");
-    if (token) {
-      setIsLoggedIn(true);
-    }
   }, []);
 
   const handleEnrollNow = async (course) => {
@@ -75,17 +70,13 @@ export const CourseTop = () => {
       });
       return;
     }
-const courseId=course._id;
     try {
-      const response = await axios.post(`https://backend-kolotemari-1.onrender.com/api/courses/${course._id}/enroll`, {
-        courseId,
-        userId: user.id,
-
-      }, {
-        withCredentials: true,
-      });
-
-      if (response.data.status === 'success') {
+      const response = await axiosInstance.post(
+        `https://backend-kolotemari-1.onrender.com/api/courses/${course._id}/enroll`,
+        { courseId: course._id, userId: user.id },
+        { withCredentials: true }
+      );
+      if (response.data.status === "success") {
         toast({
           title: "Enrollment Successful",
           description: "You have successfully enrolled in the course.",
@@ -96,7 +87,7 @@ const courseId=course._id;
       } else {
         toast({
           title: "Enrollment Failed",
-          description: response.data.message || "An error occurred while enrolling.",
+          description: response.data.message || "An error occurred.",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -105,7 +96,9 @@ const courseId=course._id;
     } catch (error) {
       toast({
         title: "Error",
-        description: error.response ? error.response.data.message : "An unexpected error occurred.",
+        description: error.response
+          ? error.response.data.message
+          : "An unexpected error occurred.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -117,24 +110,24 @@ const courseId=course._id;
     if (!isLoggedIn) {
       toast({
         title: "Please Login",
-        description: "You need to log in first to add this course to your cart.",
+        description: "You need to log in first to add to cart.",
         status: "warning",
         duration: 5000,
         isClosable: true,
       });
       return;
     }
-
     try {
-      const response = await axios.post('https://backend-kolotemari-1.onrender.com/api/cart/my', {
-        courseId: course._id,
-        name: course.title,
-        price: course.price || 0,
-      }, {
-        withCredentials: true,
-      });
-
-      if (response.data.status === 'success') {
+      const response = await axiosInstance.post(
+        "https://backend-kolotemari-1.onrender.com/api/cart/my",
+        {
+          courseId: course._id,
+          name: course.title,
+          price: course.price || 0,
+        },
+        { withCredentials: true }
+      );
+      if (response.data.status === "success") {
         toast({
           title: "Success!",
           description: "Course added to cart successfully.",
@@ -154,7 +147,9 @@ const courseId=course._id;
     } catch (error) {
       toast({
         title: "Error",
-        description: error.response ? error.response.data.message : "An unexpected error occurred.",
+        description: error.response
+          ? error.response.data.message
+          : "An unexpected error occurred.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -162,69 +157,140 @@ const courseId=course._id;
     }
   };
 
-  // Render loading state
   if (loading) {
-    return <Text color="orange.400" textAlign="center" fontSize="xl">Loading courses...</Text>;
+    return (
+      <Center py="20">
+        <Spinner size="xl" color="orange.400" />
+      </Center>
+    );
   }
 
-  // Render error state
   if (error) {
-    return <Text color="red.500" textAlign="center" fontSize="xl">Error fetching courses: {error}</Text>;
+    return (
+      <Text color="red.500" fontSize="xl" textAlign="center" py="20">
+        {error}
+      </Text>
+    );
   }
 
   return (
-    <Box className="coursesCard" padding="40px 20px" backgroundColor="#f9f9f9">
-      <Grid templateColumns="repeat(3, 1fr)" gap="40px" padding="10vh 0">
-        {Array.isArray(courses) && courses.length > 0 ? (
-          courses.slice(0, 6).map((val, index) => (
-            <Box 
-              key={index} 
-              borderRadius="10px" 
-              boxShadow="0 6px 12px rgba(0, 0, 0, 0.1)" 
-              backgroundColor="white" 
-              padding="20px" 
-              transition="transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out"
-              _hover={{ transform: "translateY(-10px)", boxShadow: "0 12px 24px rgba(0, 0, 0, 0.15)" }}
+    <Box
+      bg="#f9f9f9"
+      py={{ base: 10, md: 20 }}
+      px={{ base: 4, md: 12 }}
+      maxW="100vw"
+      overflowX="hidden"
+    >
+      {/* Introductory Text */}
+      <Box minW="100vh" mx="auto" mb={10} px={2} textAlign="center">
+        <Heading as="h2" size="xl" mb={4} fontWeight="extrabold" color="gray.800">
+          Discover Our Top Rated Courses
+        </Heading>
+        <Text fontSize="lg" color="gray.600" maxW="600px" mx="auto" lineHeight="tall">
+          Browse through featured courses designed to enhance your skills.
+      </Text>
+      </Box>
+
+      {/* Courses Grid */}
+      <SimpleGrid
+        columns={{ base: 1, sm: 2, md: 3 }}
+        spacing={{ base: 6, md: 10 }}
+        maxW="1400px"
+        mx="auto"
+      >
+        {courses.length > 0 ? (
+          courses.slice(0, 6).map((course, idx) => (
+            <Box
+              key={course._id || idx}
+              bg="white"
+              borderRadius="md"
+              boxShadow="md"
+              p={6}
+              display="flex"
+              flexDirection="column"
+              transition="all 0.3s ease"
+              _hover={{ transform: "translateY(-10px)", boxShadow: "lg" }}
             >
-              <Flex marginBottom="20px">
-                <Box width="90px" height="90px" overflow="hidden" borderRadius="full" marginRight="20px">
-                  <Image src={val.pic || "https://via.placeholder.com/90"} width="100%" height="100%" objectFit="cover" />
+              <Flex mb={4} align="center">
+                <Box
+                  flexShrink={0}
+                  w="90px"
+                  h="90px"
+                  borderRadius="full"
+                  overflow="hidden"
+                  mr={6}
+                >
+                  <Image
+                    src={course.pic || "https://via.placeholder.com/90"}
+                    alt={course.title}
+                    objectFit="cover"
+                    w="full"
+                    h="full"
+                  />
                 </Box>
-                <Stack spacing={2} flexGrow={1}>
-                  <Heading as="h2" size="md" color="#333">{val.title}</Heading>
-                  <Flex alignItems="center" marginBottom="10px">
-                    {Array(5).fill(<i className="fa fa-star" style={{ color: "#ffd700", marginRight: "3px" }} />)}
-                    <Text marginLeft="8px" color="#666">(5.0)</Text>
+                <Stack spacing={2} flex="1">
+                  <Heading as="h3" size="md" color="gray.800">
+                    {course.title}
+                  </Heading>
+                  <Flex align="center" mb={2}>
+                    {[...Array(5)].map((_, i) => (
+                      <Box key={i} color="#FFD700" mr={1} as="span">&#9733;</Box>
+                    ))}
+                    <Text ml={2} color="gray.600">(5.0)</Text>
                   </Flex>
-                  <Flex alignItems="center" marginBottom="8px">
-                    <Box width="40px" height="40px" overflow="hidden" borderRadius="full" marginRight="10px">
-                      <Image src="https://via.placeholder.com/40" width="100%" height="100%" objectFit="cover" />
+                  <Flex align="center" mb={2}>
+                    <Box
+                      w="40px"
+                      h="40px"
+                      borderRadius="full"
+                      overflow="hidden"
+                      mr={3}
+                    >
+                     
                     </Box>
-                    <Text fontSize="14px" color="#333">Instructor Name</Text>
+                    
                   </Flex>
-                  <Text marginTop="8px" color="#666">Duration: N/A</Text>
+                  <Text fontSize="sm" color="gray.500">
+                    Duration: N/A
+                  </Text>
                 </Stack>
               </Flex>
-              <Text textAlign="center" marginTop="auto" marginBottom="10px" fontSize="18px" color="#333">
-                {val.status === "free" ? "Free" : val.price}
-              </Text>
-              <Button 
-                variant="outline" 
-                width="100%" 
-                color="#333" 
-                borderColor="#333" 
-                padding="12px 24px" 
-                _hover={{ backgroundColor: "#333", color: "white", borderColor: "#333" }}
-                onClick={val.status === "free" ? () => handleEnrollNow(val) : () => handleAddToCart(val)}
+
+              <Text
+                fontSize="lg"
+                fontWeight="bold"
+                textAlign="center"
+                mb={4}
+                color="gray.700"
+                flexGrow={1}
               >
-                {val.status === "free" ? "ENROLL NOW!" : "ADD TO CART"}
+                {course.status === "free" ? "Free" : `$${course.price}`}
+              </Text>
+
+              <Button
+                variant="outline"
+                colorScheme="orange"
+                borderColor="orange.400"
+                size="md"
+                onClick={
+                  course.status === "free"
+                    ? () => handleEnrollNow(course)
+                    : () => handleAddToCart(course)
+                }
+                _hover={{ bg: "orange.400", color: "white", borderColor: "orange.400" }}
+              >
+                {course.status === "free" ? "ENROLL NOW!" : "ADD TO CART"}
               </Button>
             </Box>
           ))
         ) : (
-          <Text color="#666" textAlign="center">No courses available.</Text>
+          <Text fontSize="xl" color="gray.600" textAlign="center" w="full">
+            No courses available.
+          </Text>
         )}
-      </Grid>
+      </SimpleGrid>
     </Box>
   );
 };
+
+export default CourseTop;

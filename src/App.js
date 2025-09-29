@@ -26,6 +26,7 @@ import Signin from './components/auth/Signin';
 import ProtectedRoute from './components/ProtectedRoute';
 import AccountValidationPage from './components/auth/AccountValidationPage';
 import SuccessMessagePage from './components/auth/SuccessMessagePage';
+import PageNotFound from './components/PageNotFound';
 
 
 const App = () => {
@@ -68,7 +69,11 @@ const App = () => {
         <Route path="/payment-status" element={<ProtectedRoute><PaymentStatus /></ProtectedRoute>} />
 
         {/* Admin and Instructor Dashboard routes */}
-        <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/*" element={
+  <ProtectedRoute requireAdmin={true}>
+    <AdminDashboard />
+  </ProtectedRoute>
+}/>
         {/* Quiz route */}
         <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
 
@@ -77,6 +82,7 @@ const App = () => {
         <Route path="/signin" element={<Signin />} />
         <Route path="/validate" element={<AccountValidationPage />} />
         <Route path="/success" element={<SuccessMessagePage />} />
+        <Route path="/404" element={<PageNotFound />} />
       </Routes>
     </Router>
   );

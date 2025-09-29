@@ -91,7 +91,7 @@ export const CourseTable = () => {
   const fetchCourses = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://backend-kolotemari-1.onrender.com/api/courses', {
+      const response = await axiosInstance.get('https://backend-kolotemari-1.onrender.com/api/courses', {
         withCredentials: true // This line ensures cookies are sent with the request
       });
       
@@ -139,7 +139,7 @@ export const CourseTable = () => {
   
   const addToCart = async (course) => {
     try {
-        const response = await axios.post('https://backend-kolotemari-1.onrender.com/api/cart/my', {
+        const response = await axiosInstance.post('https://backend-kolotemari-1.onrender.com/api/cart/my', {
             courseId: course._id,
             name: course.title,
             price: course.price || 0, // Default to 0 if price is not available
@@ -220,7 +220,7 @@ const enrollCourse = async (course) => {
   const courseId=course._id;
   const userId=user.id;
   try {
-          const response = await axios.post(`https://backend-kolotemari-1.onrender.com/api/courses/${course._id}/enroll`, {
+          const response = await axiosInstance.post(`https://backend-kolotemari-1.onrender.com/api/courses/${course._id}/enroll`, {
               courseId,
               userId
           }, {

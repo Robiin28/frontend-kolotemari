@@ -38,7 +38,7 @@ export const RelatedCourse = ({ section, isSidebarCollapsed }) => {
   useEffect(() => {
     const fetchRelatedCourses = async () => {
       try {
-        const response = await axios.get(`https://kolo-temari-backend-service.onrender.com/api/courses/${section.courseId}/related`, { withCredentials: true });
+        const response = await axiosInstance.get(`https://backend-kolotemari-1.onrender.com/api/courses/${section.courseId}/related`, { withCredentials: true });
         setRelatedCourses(response.data.data.courses);
       } catch (error) {
         console.error('Error fetching related courses:', error);
@@ -62,7 +62,7 @@ export const RelatedCourse = ({ section, isSidebarCollapsed }) => {
     const userId=user.id
     const courseId=course._id
     try {
-            const response = await axios.post(`https://kolo-temari-backend-service.onrender.com/api/courses/${course._id}/enroll`, {
+            const response = await axiosInstance.post(`https://backend-kolotemari-1.onrender.com/api/courses/${course._id}/enroll`, {
                 courseId,
                 userId
             }, {
@@ -104,7 +104,7 @@ export const RelatedCourse = ({ section, isSidebarCollapsed }) => {
 
   const handleAddToCart = async (course) => {
     try {
-      const response = await axios.post('https://kolo-temari-backend-service.onrender.com/api/cart/my', {
+      const response = await axiosInstance.post('https://backend-kolotemari-1.onrender.com/api/cart/my', {
           courseId: course._id,
           name: course.title,
           price: course.price || 0, // Default to 0 if price is not available

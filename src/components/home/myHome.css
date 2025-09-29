@@ -1,14 +1,16 @@
 /* Home Page Styles */
 .home-container{
   background-color: rgb(0, 0, 0);
+   height: auto;  
 }
 
+
 .home-container .headHome {
-  width: 55%;
-  font-size: 36px;
+  width: 59%;
+  font-size: 39px;
   position: absolute;
-  top: 36vh;
-  left: 35px;
+  top: 38vh;
+  left: 69px;
   
 }
 
@@ -16,7 +18,7 @@
   font-family: "Exo", sans-serif;
   margin-left: 0; /* Adjust margin for better alignment */
   color: rgb(181, 108, 5);
-  font-size: 50px;
+  font-size: 69px;
   font-weight: 600;
 }
 
@@ -24,6 +26,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end; /* Align items to the left */
+  
 }
 
 .headImage {
@@ -74,6 +77,7 @@
   position: absolute;
   top: 70vh;
   left: 12vh;
+ 
 }
 
 .home-container .primary-btn {
@@ -99,6 +103,9 @@
 
 /* Responsive styling */
 @media (max-width: 768px) {
+  .home-container{
+    height: auto;
+  }
   .home-container .container {
     padding: 0 10px;
   }
@@ -111,23 +118,21 @@
   }
 
   .home-container .triangle {
-    border-bottom: 34vh solid rgb(226, 242, 5);
+    border-bottom: 42vh solid rgb(255, 255, 255);
     border-left: 62vh solid transparent;
   }
 
   .home-container .headHome {
-    top: 24vh;
-    left: 0;
+    top: 32vh;
+    left: 5vh;
   }
 
   .home-container .headHome h1 {
-    font-size: 35px;
+    font-size: 25px;
   }
 
-  .home-container .button-group {
-    top: 58vh;
-    left: 4vh;
-    margin: 0;
+  .home-container .button-group  {
+   display: none;
   }
 
   .home-container .primary-btn {
@@ -147,40 +152,83 @@
   }
 }
 /*  */
-/*  *//*--------------faq-------------*/
+/* /*--------------faq-------------*/
 .faq .container {
   max-width: 70%;
-  border-radius: 5px;
+  border-radius: 18px;
+  margin: 0 auto;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: none;
 }
-.faq .box { 
+
+.faq .box {
   margin-bottom: 20px;
+  padding-bottom: 12px;
 }
+
 .faq button {
-  padding: 0;
+  padding: 20px 20px;
   margin: 0;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 15px 20px;
-}
-.faq h2 {
-  color:#0c0c0c;
-  font-size: 16px;
-  font-weight: 300;
- 
-}
-.faq p {
-  padding: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1a1a1a;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 5px;
 }
 
-.faq .accordion:hover {
-  color: #fff;
-  background-color: #da5204;
- 
- 
+.faq button:hover {
+  background-color: #fff9f0; /* Light cream */
+  color: #d1651b; /* Orange brand color */
 }
-.faq .text{
-  background-color: #f3e2d3;
-  border-radius: 19px;
+
+.faq h2 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 18px;
+  pointer-events: none;
+  user-select: none;
+  color: inherit;
 }
-/*--------------faq-------------*/
+
+.faq p {
+  padding: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #4a4a4a;
+  border-left: 5px solid #d1651b;
+  background-color: #fff9f0;
+  border-radius: 0 8px 8px 0;
+  margin: 0;
+}
+
+.faq .accordion:hover h2 {
+  color: #d1651b;
+  
+}
+
+.faq .text {
+  border-radius: 12px;
+}
+@media (max-width: 768px) {
+  .faq .container {
+    max-width: 95%;
+    padding: 20px 15px;
+    
+  }
+
+  .faq button {
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+
+  .faq p {
+    font-size: 15px;
+    padding: 15px 16px;
+  }
+}
