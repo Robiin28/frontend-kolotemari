@@ -1,19 +1,140 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  SimpleGrid,
-  Image,
-  Text,
-  Button,
   Flex,
   Heading,
-  Stack,
-  useToast,
+  Image,
+  Text,
+  IconButton,
+  SimpleGrid,
   Spinner,
   Center,
+  useToast,
+  Button,
 } from "@chakra-ui/react";
-import Cookies from "js-cookie";
+import { FaHeart, FaShareAlt } from "react-icons/fa";
 import axiosInstance from "../../utils/AxiosInstance";
+import Cookies from "js-cookie";
+
+const CourseCard = ({ course, handleEnrollNow, handleAddToCart }) => {
+  return (
+    <Box
+      maxW="465px"
+      w="100%"
+      bg="white"
+      borderRadius="xl"
+      boxShadow="xl"
+      overflow="hidden"
+      display="flex"
+      flexDirection="column"
+      transition="all 0.4s ease"
+      _hover={{
+        transform: "translateY(-10px) scale(1.03)",
+        boxShadow: "2xl",
+      }}
+      m={{ base: "auto", md: 0 }}
+    >
+      {/* Image */}
+      <Box position="relative" overflow="hidden">
+        <Image
+          src={course.pic}
+          alt={course.title}
+          objectFit="cover"
+          height="220px"
+          width="100%"
+          borderTopRadius="xl"
+          transition="transform 0.4s ease"
+          _hover={{ transform: "scale(1.1)" }}
+        />
+      </Box>
+
+      {/* Title & Status */}
+      <Box p={4} borderBottom="1px solid" borderColor="gray.100">
+        <Heading
+          as="h3"
+          size="md"
+          mb={2}
+          color="gray.800"
+          fontWeight="extrabold"
+          transition="color 0.3s"
+          _hover={{ color: "orange.400" }}
+        >
+          {course.title}
+        </Heading>
+        <Flex justify="space-between" align="center">
+          <Text
+            fontSize="sm"
+            fontWeight="bold"
+            color={course.status === "free" ? "green.500" : "orange.500"}
+          >
+            {course.status === "free" ? "Free" : `Paid - $${course.price || 0}`}
+          </Text>
+          <Text fontSize="xs" color="gray.500">
+            {new Date(course.createdAt).toLocaleDateString()}
+          </Text>
+        </Flex>
+      </Box>
+
+      {/* Description */}
+      <Box
+        p={6}
+        flex="1"
+        maxH={{ base: "250px", md: "150px" }}
+        overflowY="auto"
+        fontSize="sm"
+        color="gray.700"
+        lineHeight="1.7"
+        sx={{
+          "&::-webkit-scrollbar": { width: "8px" },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#d1651b",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-track": { background: "#f1f1f1" },
+        }}
+      >
+        <Text dangerouslySetInnerHTML={{ __html: course.description }} />
+      </Box>
+
+      {/* Actions */}
+      <Flex justify="space-between" align="center" p={4} mt="auto">
+        <Flex>
+          <IconButton
+            aria-label="Like"
+            icon={<FaHeart />}
+            size="md"
+            colorScheme="red"
+            variant="ghost"
+            mr={2}
+            _hover={{ bg: "red.100" }}
+          />
+          <IconButton
+            aria-label="Share"
+            icon={<FaShareAlt />}
+            size="md"
+            variant="ghost"
+            _hover={{ bg: "gray.100" }}
+          />
+        </Flex>
+
+        <Button
+          variant="solid"
+          colorScheme="orange"
+          size="md"
+          borderRadius="md"
+          onClick={
+            course.status === "free"
+              ? () => handleEnrollNow(course)
+              : () => handleAddToCart(course)
+          }
+          _hover={{ bg: "orange.500", transform: "scale(1.05)" }}
+        >
+          {course.status === "free" ? "ENROLL NOW" : "ADD TO CART"}
+        </Button>
+      </Flex>
+    </Box>
+  );
+};
 
 export const CourseTop = () => {
   const [courses, setCourses] = useState([]);
@@ -32,9 +153,7 @@ export const CourseTop = () => {
         try {
           const userData = JSON.parse(atob(tokenParts[1]));
           setUser(userData);
-        } catch {
-          // Ignore JSON parse errors
-        }
+        } catch {}
       }
     }
   }, []);
@@ -173,6 +292,9 @@ export const CourseTop = () => {
     );
   }
 
+  // Show only 3 courses on small screens
+  const displayedCourses = courses.slice(0, 3);
+
   return (
     <Box
       bg="#f9f9f9"
@@ -181,107 +303,57 @@ export const CourseTop = () => {
       maxW="100vw"
       overflowX="hidden"
     >
-      {/* Introductory Text */}
-      <Box minW="100vh" mx="auto" mb={10} px={2} textAlign="center">
-        <Heading as="h2" size="xl" mb={4} fontWeight="extrabold" color="gray.800">
-          Discover Our Top Rated Courses
+      <Box
+        maxW="800px"
+        mx="auto"
+        mb={10}
+        px={2}
+        textAlign="center"
+        animation="fadeInSlide 1s ease forwards"
+        sx={{
+          "@keyframes fadeInSlide": {
+            "0%": { opacity: 0, transform: "translateY(-20px)" },
+            "100%": { opacity: 1, transform: "translateY(0)" },
+          },
+        }}
+      >
+        <Heading
+          as="h2"
+          size="2xl"
+          mb={4}
+          fontWeight="extrabold"
+          color="orange.400"
+          letterSpacing="wide"
+        >
+          Discover Our Top Courses
         </Heading>
-        <Text fontSize="lg" color="gray.600" maxW="600px" mx="auto" lineHeight="tall">
-          Browse through featured courses designed to enhance your skills.
-      </Text>
+        <Text
+          fontSize={{ base: "md", md: "lg" }}
+          color="gray.600"
+          maxW={{ base: "100%", md: "600px" }}
+          mx="auto"
+          lineHeight="tall"
+        >
+          Browse through our featured courses designed to enhance your skills
+          and knowledge across multiple domains. Each course is created by
+          experts to ensure you succeed in your learning journey.
+        </Text>
       </Box>
 
-      {/* Courses Grid */}
       <SimpleGrid
-        columns={{ base: 1, sm: 2, md: 3 }}
-        spacing={{ base: 6, md: 10 }}
-        maxW="1400px"
+        columns={{ base: 1, md: 2, lg: 3 }}
+        spacing={{ base: 8, md: 8 }}
+        maxW="1200px"
         mx="auto"
       >
-        {courses.length > 0 ? (
-          courses.slice(0, 6).map((course, idx) => (
-            <Box
-              key={course._id || idx}
-              bg="white"
-              borderRadius="md"
-              boxShadow="md"
-              p={6}
-              display="flex"
-              flexDirection="column"
-              transition="all 0.3s ease"
-              _hover={{ transform: "translateY(-10px)", boxShadow: "lg" }}
-            >
-              <Flex mb={4} align="center">
-                <Box
-                  flexShrink={0}
-                  w="90px"
-                  h="90px"
-                  borderRadius="full"
-                  overflow="hidden"
-                  mr={6}
-                >
-                  <Image
-                    src={course.pic || "https://via.placeholder.com/90"}
-                    alt={course.title}
-                    objectFit="cover"
-                    w="full"
-                    h="full"
-                  />
-                </Box>
-                <Stack spacing={2} flex="1">
-                  <Heading as="h3" size="md" color="gray.800">
-                    {course.title}
-                  </Heading>
-                  <Flex align="center" mb={2}>
-                    {[...Array(5)].map((_, i) => (
-                      <Box key={i} color="#FFD700" mr={1} as="span">&#9733;</Box>
-                    ))}
-                    <Text ml={2} color="gray.600">(5.0)</Text>
-                  </Flex>
-                  <Flex align="center" mb={2}>
-                    <Box
-                      w="40px"
-                      h="40px"
-                      borderRadius="full"
-                      overflow="hidden"
-                      mr={3}
-                    >
-                     
-                    </Box>
-                    
-                  </Flex>
-                  <Text fontSize="sm" color="gray.500">
-                    Duration: N/A
-                  </Text>
-                </Stack>
-              </Flex>
-
-              <Text
-                fontSize="lg"
-                fontWeight="bold"
-                textAlign="center"
-                mb={4}
-                color="gray.700"
-                flexGrow={1}
-              >
-                {course.status === "free" ? "Free" : `$${course.price}`}
-              </Text>
-
-              <Button
-                variant="outline"
-                colorScheme="orange"
-                borderColor="orange.400"
-                size="md"
-                onClick={
-                  course.status === "free"
-                    ? () => handleEnrollNow(course)
-                    : () => handleAddToCart(course)
-                }
-                _hover={{ bg: "orange.400", color: "white", borderColor: "orange.400" }}
-              >
-                {course.status === "free" ? "ENROLL NOW!" : "ADD TO CART"}
-              </Button>
-            </Box>
+        {displayedCourses.length > 0 ? (
+          displayedCourses.map((course) => (
+            <CourseCard
+              key={course._id}
+              course={course}
+              handleEnrollNow={handleEnrollNow}
+              handleAddToCart={handleAddToCart}
+            />
           ))
         ) : (
           <Text fontSize="xl" color="gray.600" textAlign="center" w="full">
