@@ -1,67 +1,46 @@
-import React from "react";
-import { Button } from "@chakra-ui/react"; // Import Chakra UI Button
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import "./myHome.css";
+import React, { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {HomePage1} from "./HomePage1";  // Your first home page component
+import {HomePage2} from "./HomePage2";  // Your second home page component (you create this)
 
 export const MyHome = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Function to handle button click for enrollment
-  const handleEnrollNow = () => {
-    navigate("/course"); // Navigate to /course
-  };
+  // Example: switch pages after some interval - you can use your own trigger as well
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentPage((prev) => (prev === 1 ? 2 : 1));
+    }, 8000); // switch every 8 seconds - change as needed
 
-  // Function to handle button click for viewing courses
-  const handleViewCourse = () => {
-    navigate("/course"); // Navigate to /course
-  };
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
-    <div className="home-container">
-      <div className="headHome">
-      
-        <h1>BE BETTER <br />LEARN BETTER</h1>
-      </div>
-      <div className="headImage">
-        <img src="/image/real.png" alt="Background" className="background-image" />
-        <div className="triangle"></div>
-      </div>
-
-      <section className="home">
-        <div className="container">
-          <div className="row">
-            <p></p>
-            <div className="button-group 2">
-              <Button 
-                onClick={handleEnrollNow} // Set onClick handler
-                bg="white" // White background
-                color=" rgb(181, 108, 5);" // Orange text color
-                size="lg" // Large size
-                fontWeight={650}
-               padding="26px 42px" // Increased padding for larger button
-                ml={18} // Left margin for spacing
-                borderRadius="10px 0 0 30px" // Curve left side
-                rightIcon={<i className="fa fa-long-arrow-alt-right"></i>}
-              >
-                Enroll Now
-              </Button>
-              <Button 
-                onClick={handleViewCourse} // Set onClick handler
-                bg=" rgb(181, 108, 5);" // Orange background
-                color="white" // White text color
-                size="lg" // Large size
-                padding="26px 42px" // Increased padding for larger button
-                ml={12} // Left margin for spacing
-                borderRadius="0 10px 30px 0" // Curve right side
-                rightIcon={<i className="fa fa-long-arrow-alt-right"></i>}
-              >
-                VIEW COURSE
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-      <div className="margin"></div>
-    </div>
+    <AnimatePresence mode="wait">
+      {currentPage === 1 && (
+        <motion.div
+          key="page1"
+          initial={{ opacity: 0, x: 300 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -300 }}
+          transition={{ duration: 0.8 }}
+        >
+          <HomePage1 />
+        </motion.div>
+      )}
+      {currentPage === 2 && (
+        <motion.div
+          key="page2"
+          initial={{ opacity: 0, x: 300 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -300 }}
+          transition={{ duration: 0.8 }}
+        >
+          <HomePage2 />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
+
+export default MyHome;

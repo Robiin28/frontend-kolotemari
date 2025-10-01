@@ -1,35 +1,50 @@
 import React, { useState } from "react";
 import {
-  Button,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  Text,
-  Link,
+  Box,
   Stack,
+  Heading,
+  Text,
+  Button,
+  Input,
+  Link,
+  Image,
+  Checkbox,
+  Divider,
+  IconButton,
+  InputGroup,
+  InputRightElement,
+  Spinner,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalBody,
-  useDisclosure,
+  ModalFooter,
+  ModalCloseButton,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
-import axiosInstance from "../../utils/AxiosInstance"; // Your axios instance
-import GAuth from "./GAuth"; // Placeholder for your GAuth component
-import { useNavigate } from "react-router-dom"; // Import useNavigate from React Router
+import { FaGoogle, FaGithub } from "react-icons/fa";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import axiosInstance from "../../utils/AxiosInstance";
+import { useNavigate } from "react-router-dom";
 
 const SignupModal = ({ isOpen, onClose, onOpenSignin }) => {
+  const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  const [error, setError] = useState(null); // State to hold error messages
-  const [success, setSuccess] = useState(null); // State to hold success messages
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [touched, setTouched] = useState({});
 
-  const navigate = useNavigate(); // Hook for navigation
+  const togglePassword = () => setShowPassword(!showPassword);
 
   const handleChange = (e) => {
     setFormData({
@@ -38,121 +53,288 @@ const SignupModal = ({ isOpen, onClose, onOpenSignin }) => {
     });
   };
 
+  const handleBlur = (e) => {
+    setTouched({ ...touched, [e.target.id]: true });
+  };
+
+  const validate = () => {
+    const errors = {};
+
+    if (!formData.username.trim()) errors.username = "Name is required";
+    if (!formData.email.trim()) errors.email = "Email is required";
+    if (!formData.password) errors.password = "Password is required";
+    if (!formData.confirmPassword) errors.confirmPassword = "Confirm your password";
+
+    if (
+      formData.password &&
+      formData.confirmPassword &&
+      formData.password !== formData.confirmPassword
+    ) {
+      errors.confirmPassword = "Passwords do not match";
+    }
+
+    return errors;
+  };
+
+  const errors = validate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+    if (Object.keys(errors).length > 0) {
+      setTouched({
+        username: true,
+        email: true,
+        password: true,
+        confirmPassword: true,
+      });
       return;
     }
 
+    setIsLoading(true);
+    setError(null);
+    setSuccess(null);
+
     try {
-      // POST request to signup endpoint
-      const response = await axiosInstance.post("https://backend-kolotemari-1.onrender.com/api/auth/signup", {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        confirmPassword:formData.confirmPassword
-      });
+      const response = await axiosInstance.post(
+        "https://backend-kolotemari-1.onrender.com/api/auth/signup",
+        {
+          name: formData.username,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        }
+      );
 
       if (response.data.status === "success") {
         setSuccess("Signup successful! You can now log in.");
-        setError(null); // Clear any previous errors
-        // Redirect to validation page and send form data
+        setError(null);
         navigate("/validate", {
           state: {
             email: formData.email,
-            name: formData.name,
+            name: formData.username,
           },
         });
-        onClose(); // Close the signup modal
+        onClose();
       } else {
         setError("Signup failed. Please try again.");
       }
     } catch (err) {
-      // Improved error handling to display the actual error message
       if (err.response && err.response.data) {
         setError(err.response.data.message || "An unexpected error occurred.");
       } else {
         setError("An unexpected error occurred. Please try again.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const buttonBgColor = "#121212";
+  const buttonTextColor = "#fff";
+  const headerColor = "orange.600";
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} size="md" isCentered scrollBehavior="inside">
       <ModalOverlay />
-      <ModalContent maxH="100vh" overflowY="auto" borderRadius="0">
-        <ModalHeader bg="black" color="white" borderRadius="0">
-          <Heading as="h6" size="lg" textAlign="center">
-            Hi, Welcome Join Us!
+      <ModalContent
+        p={6}
+        boxShadow="md"
+        borderRadius="md"
+        borderTop="4px solid"
+        borderTopColor={headerColor}
+        bg="white"
+        maxW="440px"
+        _hover={{ boxShadow: "xl" }}
+      >
+        <ModalHeader
+          display="flex"
+          alignItems="center"
+          gap={2}
+          borderBottom="4px solid"
+          borderBottomColor={headerColor}
+          userSelect="none"
+          bg="white"
+        >
+          <Image
+            src="/image/Kolo.png"
+            alt="Company Logo"
+            boxSize="40px"
+            objectFit="contain"
+          />
+          <Heading
+            size="lg"
+            color={headerColor}
+            fontWeight="bold"
+            flexGrow={1}
+            textAlign="center"
+            userSelect="none"
+          >
+            Sign up
           </Heading>
+          <ModalCloseButton position="relative" />
         </ModalHeader>
-        <ModalBody bg="white">
-          <Stack spacing={3} mt={1}>
-            {error && <Text color="red.500">{error}</Text>} {/* Show error message */}
-            {success && <Text color="green.500">{success}</Text>} {/* Show success message */}
 
-            <FormControl id="name" isRequired>
-              <FormLabel>name</FormLabel>
+        <ModalBody bg="white" px={6} pt={4} pb={6}>
+          <Text textAlign="center" color="gray.500" mb={4}>
+            Join us by creating your account
+          </Text>
+
+          <Stack spacing={3} mb={4}>
+            <Button
+              w="100%"
+              leftIcon={<FaGoogle />}
+              bg="white"
+              border="1px solid"
+              borderColor="gray.300"
+              color="black"
+              _hover={{ bg: "#e6e6e6" }}
+              variant="solid"
+              justifyContent="center"
+            >
+              Sign up with Google
+            </Button>
+            <Button
+              w="100%"
+              leftIcon={<FaGithub />}
+              bg="white"
+              border="1px solid"
+              borderColor="gray.300"
+              color="black"
+              _hover={{ bg: "#e6e6e6" }}
+              variant="solid"
+              justifyContent="center"
+            >
+              Sign up with Github
+            </Button>
+          </Stack>
+
+          <Divider mb={4} />
+
+          <Stack spacing={2} as="form" onSubmit={handleSubmit}>
+            <FormControl isInvalid={touched.username && errors.username} isRequired>
               <Input
-                placeholder="enter your name"
-                bg="gray.100"
+                id="username"
+                name="signup-username"
+                placeholder="Enter your name"
+                value={formData.username}
                 onChange={handleChange}
+                onBlur={handleBlur}
+                bg={touched.username && !formData.username.trim() ? "red.100" : "gray.100"}
+                autoComplete="off"
               />
+              <FormErrorMessage>{errors.username}</FormErrorMessage>
             </FormControl>
 
-            <FormControl id="email" isRequired>
-              <FormLabel>Email</FormLabel>
+            <FormControl isInvalid={touched.email && errors.email} isRequired>
               <Input
+                id="email"
+                name="signup-email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                bg={touched.email && !formData.email.trim() ? "red.100" : "gray.100"}
                 type="email"
-                placeholder="Email"
-                bg="gray.100"
-                onChange={handleChange}
+                autoComplete="off"
               />
+              <FormErrorMessage>{errors.email}</FormErrorMessage>
             </FormControl>
 
-            <FormControl id="password" isRequired>
-              <FormLabel>Password</FormLabel>
-              <Input
-                type="password"
-                placeholder="Password"
-                bg="gray.100"
-                onChange={handleChange}
-              />
+            <FormControl isInvalid={touched.password && errors.password} isRequired>
+              <InputGroup>
+                <Input
+                  id="password"
+                  name="signup-password"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  type={showPassword ? "text" : "password"}
+                  bg={touched.password && !formData.password ? "red.100" : "gray.100"}
+                  autoComplete="new-password"
+                />
+                <InputRightElement width="3rem">
+                  <IconButton
+                    h="1.75rem"
+                    size="sm"
+                    onClick={togglePassword}
+                    icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    bg="transparent"
+                    _hover={{ bg: "transparent" }}
+                  />
+                </InputRightElement>
+              </InputGroup>
+              <FormErrorMessage>{errors.password}</FormErrorMessage>
             </FormControl>
 
-            <FormControl id="confirmPassword" isRequired>
-              <FormLabel>Confirm Password</FormLabel>
+            <FormControl isInvalid={touched.confirmPassword && errors.confirmPassword} isRequired>
               <Input
-                type="password"
-                placeholder="Confirm Password"
-                bg="gray.100"
+                id="confirmPassword"
+                name="signup-confirmPassword"
+                placeholder="Confirm your password"
+                value={formData.confirmPassword}
                 onChange={handleChange}
+                onBlur={handleBlur}
+                type={showPassword ? "text" : "password"}
+                bg={
+                  touched.confirmPassword &&
+                  (!formData.confirmPassword || errors.confirmPassword)
+                    ? "red.100"
+                    : "gray.100"
+                }
+                autoComplete="new-password"
               />
+              <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
             </FormControl>
+
+            {error && (
+              <Text color="red.500" fontSize="sm" mt={-1} mb={2} textAlign="center">
+                {error}
+              </Text>
+            )}
+
+            {success && (
+              <Text color="green.500" fontSize="sm" textAlign="center">
+                {success}
+              </Text>
+            )}
+
+            <Stack direction="row" align="center" justify="space-between" spacing={2}>
+              <Checkbox size="sm">Remember me</Checkbox>
+              <Link color="blue.500" fontSize="sm" onClick={onOpenSignin}>
+                Forgot Password?
+              </Link>
+            </Stack>
 
             <Button
-              bg="orange.600"
-              color="white"
-              width="full"
-              _hover={{
-                bg: "black",
-                color: "white",
-              }}
-              onClick={handleSubmit}
+              type="submit"
+              bg={buttonBgColor}
+              color={buttonTextColor}
+              _hover={{ bg: "#2a2a2a" }}
+              variant="solid"
+              disabled={isLoading}
+              position="relative"
+              height="40px"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              mt={3}
             >
-              Sign Up
+              {isLoading && (
+                <Spinner
+                  size="sm"
+                  color="orange.400"
+                  thickness="3px"
+                  position="absolute"
+                  top="50%"
+                  left="50%"
+                  transform="translate(-50%, -50%)"
+                />
+              )}
+              <Box opacity={isLoading ? 0 : 1}>Sign up</Box>
             </Button>
-
-            <GAuth /> {/* Placeholder for Google Auth component */}
-
-            <Text textAlign="center" mt={3}>
-              Already have an account?{" "}
-              <Link color="orange.600" onClick={onOpenSignin}>
-                Sign In
-              </Link>
-            </Text>
           </Stack>
         </ModalBody>
       </ModalContent>

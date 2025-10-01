@@ -1,17 +1,48 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100;0,200;0,800;0,900;1,100;1,200;1,800;1,900&display=swap");
 
+/* Define CSS custom properties (variables) for your primary fonts */
+:root {
+  --font-primary: 'Roboto', sans-serif;
+  --font-heading: 'Exo', sans-serif;
+   
+  --app-font-primary: 'Roboto', sans-serif;
+  --app-font-heading: 'Exo', sans-serif;
+
+  /* Colors */
+  --app-layer1-bg: #fff;
+  --app-layer2-bg: #121212; /* unique background for layer 2 */
+
+  --app-nav-text-color: #ffffff;
+  --app-nav-text-color-alt: #cccccc; /* alternative nav text color */
+
+  /* Icons */
+  --app-icon-color-primary: #050505;
+  --app-icon-color-hover: #ffffff99;
+}
+
+
+/* Apply globally */
+body {
+  font-family: var(--font-primary);
+  /* Any default font weight, size, etc. */
+}
+
+/* Optionally apply heading font globally for headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
 
 :root {
     --primaryBackground: #fff;
     --secondaryBackground:#1a1919;
     --third:#865d3d;
-    --primaryColor: #1eb2a6;
+    --primaryColor: #000000;
     --secondaryColor:#000;
     --iconFirstColor:#ffffff4d;
-    --iconSecondColor:#0bb119;
+    --iconSecondColor:#050505;
     --white: #fff;
-    --black: #0a21c0;
+    --black: #070707;
     
   }
 * {
@@ -53,19 +84,7 @@ a{
 li{
     letter-spacing: none;
 }
-button {
-     padding: 17px 30px;
-    background-color: #fff;
-    color:var(--secondaryColor);
-    font-weight: 600;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    box-shadow: 0 24px 36px -11px rgb(0 0 0 / 9%);
-    transition: 0.5s;
-    border-radius: 30px;
-   
-  }
+
   button i {
     margin-left: 20px;
   }

@@ -21,7 +21,7 @@ export const SignUpBox = () => {
           <FormLabel className="floating-label">What's your name...</FormLabel>
         </FormControl>
 
-        <FormControl isRequired position="relative" marginTop="20px">
+        <FormControl isRequired position="relative" marginTop="0">
           <Input 
             type="email" 
             placeholder=" " 
@@ -31,7 +31,7 @@ export const SignUpBox = () => {
           <FormLabel className="floating-label">What's your email...</FormLabel>
         </FormControl>
 
-        <FormControl isRequired position="relative" marginTop="20px">
+        <FormControl isRequired position="relative" marginTop="10px">
           <Input 
             type="tel" 
             placeholder=" " 

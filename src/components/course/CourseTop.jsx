@@ -11,27 +11,28 @@ import {
   Center,
   useToast,
   Button,
+  VStack,
 } from "@chakra-ui/react";
 import { FaHeart, FaShareAlt } from "react-icons/fa";
 import axiosInstance from "../../utils/AxiosInstance";
 import Cookies from "js-cookie";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 const CourseCard = ({ course, handleEnrollNow, handleAddToCart }) => {
   return (
-    <Box
-      maxW="465px"
+    <MotionBox
+      maxW={{ base: "90vw", md: "465px" }}
       w="100%"
       bg="white"
       borderRadius="xl"
-      boxShadow="xl"
+      boxShadow="0 6px 12px rgba(0,0,0,0.15)"
       overflow="hidden"
       display="flex"
       flexDirection="column"
       transition="all 0.4s ease"
-      _hover={{
-        transform: "translateY(-10px) scale(1.03)",
-        boxShadow: "2xl",
-      }}
+      whileHover={{ scale: 1.03, y: -8, boxShadow: "0 10px 25px rgba(0,0,0,0.25)" }}
       m={{ base: "auto", md: 0 }}
     >
       {/* Image */}
@@ -40,31 +41,27 @@ const CourseCard = ({ course, handleEnrollNow, handleAddToCart }) => {
           src={course.pic}
           alt={course.title}
           objectFit="cover"
-          height="220px"
+          height={{ base: "180px", md: "220px" }}
           width="100%"
           borderTopRadius="xl"
-          transition="transform 0.4s ease"
-          _hover={{ transform: "scale(1.1)" }}
         />
       </Box>
 
       {/* Title & Status */}
-      <Box p={4} borderBottom="1px solid" borderColor="gray.100">
+      <Box p={{ base: 4, md: 6 }} borderBottom="1px solid" borderColor="gray.100">
         <Heading
           as="h3"
           size="md"
           mb={2}
           color="gray.800"
-          fontWeight="extrabold"
-          transition="color 0.3s"
-          _hover={{ color: "orange.400" }}
+          fontWeight="bold"
         >
           {course.title}
         </Heading>
         <Flex justify="space-between" align="center">
           <Text
             fontSize="sm"
-            fontWeight="bold"
+            fontWeight="semibold"
             color={course.status === "free" ? "green.500" : "orange.500"}
           >
             {course.status === "free" ? "Free" : `Paid - $${course.price || 0}`}
@@ -77,15 +74,15 @@ const CourseCard = ({ course, handleEnrollNow, handleAddToCart }) => {
 
       {/* Description */}
       <Box
-        p={6}
+        p={{ base: 4, md: 6 }}
         flex="1"
-        maxH={{ base: "250px", md: "150px" }}
+        maxH={{ base: "250px", md: "180px" }}
         overflowY="auto"
         fontSize="sm"
         color="gray.700"
         lineHeight="1.7"
         sx={{
-          "&::-webkit-scrollbar": { width: "8px" },
+          "&::-webkit-scrollbar": { width: "6px" },
           "&::-webkit-scrollbar-thumb": {
             background: "#d1651b",
             borderRadius: "4px",
@@ -93,11 +90,11 @@ const CourseCard = ({ course, handleEnrollNow, handleAddToCart }) => {
           "&::-webkit-scrollbar-track": { background: "#f1f1f1" },
         }}
       >
-        <Text dangerouslySetInnerHTML={{ __html: course.description }} />
+        <Text style={{ paddingLeft: "4px", paddingRight: "4px" }} dangerouslySetInnerHTML={{ __html: course.description }} />
       </Box>
 
       {/* Actions */}
-      <Flex justify="space-between" align="center" p={4} mt="auto">
+      <Flex justify="space-between" align="center" p={{ base: 4, md: 6 }} mt="auto">
         <Flex>
           <IconButton
             aria-label="Like"
@@ -132,7 +129,7 @@ const CourseCard = ({ course, handleEnrollNow, handleAddToCart }) => {
           {course.status === "free" ? "ENROLL NOW" : "ADD TO CART"}
         </Button>
       </Flex>
-    </Box>
+    </MotionBox>
   );
 };
 
@@ -303,47 +300,32 @@ export const CourseTop = () => {
       maxW="100vw"
       overflowX="hidden"
     >
-      <Box
-        maxW="800px"
-        mx="auto"
-        mb={10}
-        px={2}
-        textAlign="center"
-        animation="fadeInSlide 1s ease forwards"
-        sx={{
-          "@keyframes fadeInSlide": {
-            "0%": { opacity: 0, transform: "translateY(-20px)" },
-            "100%": { opacity: 1, transform: "translateY(0)" },
-          },
-        }}
-      >
+      <VStack spacing={4} mb={12} maxW="700px" mx="auto" textAlign="center">
         <Heading
-          as="h2"
-          size="2xl"
-          mb={4}
-          fontWeight="extrabold"
-          color="orange.400"
-          letterSpacing="wide"
+          as="h1"
+          fontSize={{ base: "2xl", md: "3xl" }}
+          fontWeight="bold"
+          color="#a32622"
+          fontFamily="'Exo', sans-serif"
         >
           Discover Our Top Courses
         </Heading>
         <Text
           fontSize={{ base: "md", md: "lg" }}
           color="gray.600"
-          maxW={{ base: "100%", md: "600px" }}
-          mx="auto"
-          lineHeight="tall"
+          lineHeight="1.7"
+          fontFamily="'Exo', sans-serif"
         >
           Browse through our featured courses designed to enhance your skills
           and knowledge across multiple domains. Each course is created by
           experts to ensure you succeed in your learning journey.
         </Text>
-      </Box>
+      </VStack>
 
       <SimpleGrid
         columns={{ base: 1, md: 2, lg: 3 }}
-        spacing={{ base: 8, md: 8 }}
-        maxW="1200px"
+        spacing={{ base: 8, md: 10 }}
+        maxW="1300px"
         mx="auto"
       >
         {displayedCourses.length > 0 ? (

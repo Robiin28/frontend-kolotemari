@@ -4,7 +4,6 @@
 
 .about {
   width: 100%;
-  background-color: #fafafa; /* subtle background */
   padding: 60px 20px;
  
 }
@@ -14,7 +13,7 @@
 .about h1 {
   text-align: center;
   font-size: 2.2rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #d1651b; /* brand orange */
   margin-bottom: 30px;
   font-family: "Exo", "Roboto", sans-serif;
@@ -71,6 +70,7 @@
 }
 .aboutHomes .items {
   margin-top: 50px;
+  
 }
 .aboutHomes .item {
   background-color: #fff;
@@ -274,7 +274,9 @@
     gap: 1rem;
     margin-top: 1rem;
   }
-  
+  .text p{
+    margin-left:8px ;
+  }
   .share-button {
     display: flex;
     align-items: center;

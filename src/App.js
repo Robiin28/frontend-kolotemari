@@ -21,12 +21,14 @@ import InstructorDashboard from './components/Instructor/InstructorDashboard';
 import PaymentPage from './components/PaymentPage';
 import PaymentSuccessPage from './components/PaymentSuccessPage';
 import PaymentStatus from './components/PaymentStatus';
-import Signup from './components/auth/Signup';
-import Signin from './components/auth/Signin';
+
 import ProtectedRoute from './components/ProtectedRoute';
 import AccountValidationPage from './components/auth/AccountValidationPage';
 import SuccessMessagePage from './components/auth/SuccessMessagePage';
 import PageNotFound from './components/PageNotFound';
+import {Snippet}  from './components/About/Snippet';
+import {SignPage} from './components/auth/Signpage';
+import {SignUpPage} from './components/auth/SignupPage';
 
 
 const App = () => {
@@ -78,14 +80,16 @@ const App = () => {
         <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
 
         {/* Auth routes */}
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signin" element={<SignPage />} />
         <Route path="/validate" element={<AccountValidationPage />} />
         <Route path="/success" element={<SuccessMessagePage />} />
         <Route path="/404" element={<PageNotFound />} />
+          <Route path="/snip" element={<Snippet/>} />
       </Routes>
     </Router>
   );
 };
+
 
 export default App;

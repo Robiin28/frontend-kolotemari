@@ -1,6 +1,6 @@
 /* Home Page Styles */
 .home-container{
-  background-color: rgb(0, 0, 0);
+  background-color: #121212;
    height: auto;  
 }
 
@@ -13,11 +13,25 @@
   left: 69px;
   
 }
+.containerds{
+  width: 90%;
+  display: flex;
+  margin:20px;
+  margin: auto;
+  padding: 30px;
+}
+.containerd{
+  
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  padding:30px;
+}
 
 .home-container .headHome h1 {
   font-family: "Exo", sans-serif;
   margin-left: 0; /* Adjust margin for better alignment */
-  color: rgb(181, 108, 5);
+  color: #cfa15f;
   font-size: 69px;
   font-weight: 600;
 }
@@ -118,7 +132,7 @@
   }
 
   .home-container .triangle {
-    border-bottom: 42vh solid rgb(255, 255, 255);
+    border-bottom: 45vh solid rgb(255, 255, 255);
     border-left: 62vh solid transparent;
   }
 
