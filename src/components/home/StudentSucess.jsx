@@ -101,6 +101,11 @@ export default function StudentSuccess() {
   const [sectionHeight, setSectionHeight] = useState(1);
   const speedFactor = useBreakpointValue({ base: 6, md: 4 });
 
+  // Reset scroll on refresh to top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Update section position and height on load & resize
   useEffect(() => {
     const handleResize = () => {
@@ -118,13 +123,22 @@ export default function StudentSuccess() {
   // Track window scroll
   useEffect(() => {
     const handleScroll = () => {
+      if (!sectionRef.current) return;
       const scrollTop = window.scrollY || window.pageYOffset;
-      const progress = (scrollTop - sectionTop + window.innerHeight) / (sectionHeight + window.innerHeight);
-      scrollY.set(Math.min(Math.max(progress, 0), 1));
+      const height = sectionRef.current.offsetHeight;
+      const top = sectionRef.current.offsetTop;
+
+      if (height === 0) return;
+
+      let progress = (scrollTop - top + window.innerHeight) / (height + window.innerHeight);
+      progress = Math.min(Math.max(progress, 0), 1);
+      scrollY.set(progress);
     };
+
     window.addEventListener("scroll", handleScroll);
+    handleScroll(); // set initial value correctly
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [sectionTop, sectionHeight, scrollY]);
+  }, [scrollY]);
 
   const topX = useTransform(scrollY, [0, 1], ["0%", `-${50 * speedFactor}%`]);
   const bottomX = useTransform(scrollY, [0, 1], [`-${50 * speedFactor}%`, "0%"]);
@@ -143,7 +157,15 @@ export default function StudentSuccess() {
     <Box ref={sectionRef} bg="white" color="black" px={{ base: 4, md: 8 }} py={{ base: 8, md: 16 }}>
       <Text fontSize={{ base: "2xl", md: "4xl" }} fontWeight="bold" mb={{ base: 6, md: 12 }} textAlign="center">
         Student Testimonials
-        <Text fontWeight="400" color="gray.700" fontSize={{ base: "sm", md: "md" }} textAlign="center" maxW="3xl" mx="auto" mt={2}>
+        <Text
+          fontWeight="400"
+          color="gray.700"
+          fontSize={{ base: "sm", md: "md" }}
+          textAlign="center"
+          maxW="3xl"
+          mx="auto"
+          mt={2}
+        >
           Hear directly from our students about their learning experiences, success stories, and how our courses helped them achieve their goals.
         </Text>
       </Text>
@@ -165,28 +187,74 @@ export default function StudentSuccess() {
               justifyContent="space-between"
               {...cardHoverShadow}
             >
-              <Text fontSize={{ base: "xs", md: "md" }} mb={4} fontStyle="italic" position="relative" pl={6} color="gray.800" flexGrow={1}>
-                <Box as="span" position="absolute" left={0} top={0} fontSize="3xl" color="gray.300" lineHeight="1" userSelect="none">“</Box>
+              <Text
+                fontSize={{ base: "xs", md: "md" }}
+                mb={4}
+                fontStyle="italic"
+                position="relative"
+                pl={6}
+                color="gray.800"
+                flexGrow={1}
+              >
+                <Box
+                  as="span"
+                  position="absolute"
+                  left={0}
+                  top={0}
+                  fontSize="3xl"
+                  color="gray.300"
+                  lineHeight="1"
+                  userSelect="none"
+                >
+                  “
+                </Box>
                 {item.quote}
               </Text>
               {item.isCompany ? (
                 <>
                   <Flex alignItems="center" gap={2} mb={2}>
-                    <Image src="/image/real.png" alt="Company logo" boxSize={{ base: "20px", md: "24px" }} objectFit="cover" borderRadius="sm" />
-                    <Text fontWeight="bold" color="gray.900" fontSize={{ base: "xs", md: "sm" }}>{item.source}</Text>
+                    <Image
+                      src="/image/real.png"
+                      alt="Company logo"
+                      boxSize={{ base: "20px", md: "24px" }}
+                      objectFit="cover"
+                      borderRadius="sm"
+                    />
+                    <Text fontWeight="bold" color="gray.900" fontSize={{ base: "xs", md: "sm" }}>
+                      {item.source}
+                    </Text>
                   </Flex>
-                  <Text fontSize="xs" color="gray.500" mb={2}>{item.responses}</Text>
+                  <Text fontSize="xs" color="gray.500" mb={2}>
+                    {item.responses}
+                  </Text>
                 </>
               ) : (
                 <Flex alignItems="center" gap={2} mb={2}>
-                  <Image src="/image/real.png" alt={item.name} boxSize={{ base: "30px", md: "36px" }} objectFit="cover" borderRadius="full" />
+                  <Image
+                    src="/image/real.png"
+                    alt={item.name}
+                    boxSize={{ base: "30px", md: "36px" }}
+                    objectFit="cover"
+                    borderRadius="full"
+                  />
                   <Box>
-                    <Text fontWeight="bold" color="gray.900" fontSize={{ base: "xs", md: "sm" }}>{item.name}</Text>
-                    <Text fontSize="xs" color="gray.500">{item.role}</Text>
+                    <Text fontWeight="bold" color="gray.900" fontSize={{ base: "xs", md: "sm" }}>
+                      {item.name}
+                    </Text>
+                    <Text fontSize="xs" color="gray.500">
+                      {item.role}
+                    </Text>
                   </Box>
                 </Flex>
               )}
-              <Link href={item.linkHref} color="purple.600" fontWeight="semibold" fontSize={{ base: "xs", md: "sm" }}>{item.linkText} &gt;</Link>
+              <Link
+                href={item.linkHref}
+                color="purple.600"
+                fontWeight="semibold"
+                fontSize={{ base: "xs", md: "sm" }}
+              >
+                {item.linkText} &gt;
+              </Link>
             </Box>
           ))}
         </MotionFlex>
@@ -209,18 +277,54 @@ export default function StudentSuccess() {
               justifyContent="space-between"
               {...cardHoverShadow}
             >
-              <Text fontSize={{ base: "xs", md: "md" }} mb={4} fontStyle="italic" position="relative" pl={6} color="gray.800" flexGrow={1}>
-                <Box as="span" position="absolute" left={0} top={0} fontSize="3xl" color="gray.300" lineHeight="1" userSelect="none">“</Box>
+              <Text
+                fontSize={{ base: "xs", md: "md" }}
+                mb={4}
+                fontStyle="italic"
+                position="relative"
+                pl={6}
+                color="gray.800"
+                flexGrow={1}
+              >
+                <Box
+                  as="span"
+                  position="absolute"
+                  left={0}
+                  top={0}
+                  fontSize="3xl"
+                  color="gray.300"
+                  lineHeight="1"
+                  userSelect="none"
+                >
+                  “
+                </Box>
                 {item.quote}
               </Text>
               <Flex alignItems="center" gap={2} mb={2}>
-                <Image src="/image/real.png" alt={item.name} boxSize={{ base: "30px", md: "36px" }} objectFit="cover" borderRadius="full" />
+                <Image
+                  src="/image/real.png"
+                  alt={item.name}
+                  boxSize={{ base: "30px", md: "36px" }}
+                  objectFit="cover"
+                  borderRadius="full"
+                />
                 <Box>
-                  <Text fontWeight="bold" color="gray.900" fontSize={{ base: "xs", md: "sm" }}>{item.name}</Text>
-                  <Text fontSize="xs" color="gray.500">{item.role}</Text>
+                  <Text fontWeight="bold" color="gray.900" fontSize={{ base: "xs", md: "sm" }}>
+                    {item.name}
+                  </Text>
+                  <Text fontSize="xs" color="gray.500">
+                    {item.role}
+                  </Text>
                 </Box>
               </Flex>
-              <Link href={item.linkHref} color="purple.600" fontWeight="semibold" fontSize={{ base: "xs", md: "sm" }}>{item.linkText} &gt;</Link>
+              <Link
+                href={item.linkHref}
+                color="purple.600"
+                fontWeight="semibold"
+                fontSize={{ base: "xs", md: "sm" }}
+              >
+                {item.linkText} &gt;
+              </Link>
             </Box>
           ))}
         </MotionFlex>
