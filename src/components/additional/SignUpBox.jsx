@@ -5,10 +5,12 @@ export const SignUpBox = () => {
   return (
     <Box
       position="relative"
-      height="94vh"
+      height={{ base: "auto", md: "94vh" }} // Auto height on mobile, full height on desktop
+      minH={{ base: "650px", md: "auto" }} // Minimum height to prevent very small box
       display="flex"
       justifyContent="center"
       alignItems="center"
+      py={{ base: 12, md: 0 }} // Add vertical padding on small screens
       backgroundImage="url('/image/students.jpg')"
       backgroundSize="cover"
       backgroundPosition="center"
@@ -44,7 +46,7 @@ export const SignUpBox = () => {
       {/* Sign up form box */}
       <Box
         bg="white"
-        p={{ base: 4, md: 8 }}
+        p={{ base: 6, md: 8 }}
         borderRadius="md"
         boxShadow="0 6px 12px rgba(0,0,0,0.15)"
         textAlign="center"
@@ -53,9 +55,6 @@ export const SignUpBox = () => {
         position={{ base: "static", md: "absolute" }}
         right={{ base: "auto", md: "10%" }}
       >
-        {/* Small screen note shown inside form only on base */}
-        <Box display={{ base: "none", md: "block" }} mb={6} />
-
         <Heading as="h2" fontSize={{ base: "1.6rem", md: "2rem" }} mb="20px">
           Sign Up Now
         </Heading>
