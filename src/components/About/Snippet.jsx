@@ -11,19 +11,22 @@ import {
 const MotionBox = motion(Box);
 
 export const Snippet = () => {
-  const contentWidth = useBreakpointValue({ base: "78vw", md: "70vw" });
+  // Widths and spacing
+  const contentWidth = useBreakpointValue({ base: "95vw", md: "70vw" });
   const textAlign = useBreakpointValue({ base: "center", md: "left" });
   const plValue = useBreakpointValue({ base: 0, md: 6 });
+  const sectionGap = useBreakpointValue({ base: 6, md: 20 }); // more gap on small screen
+  const paragraphMargin = useBreakpointValue({ base: 6, md: 6 }); // margin below heading/paragraph
 
   return (
     <Flex
       maxW={contentWidth}
       mx="auto"
-      py={{ base: 12, md: 20 }}
+      py={{ base: 6, md: 12 }}
       px={{ base: 4, md: 8 }}
       direction={{ base: "column", md: "row" }}
       align="center"
-      gap="20px"
+      gap={sectionGap}
       fontFamily="'Inter', sans-serif"
     >
       {/* Left images container */}
@@ -32,9 +35,9 @@ export const Snippet = () => {
         spacing="12px"
         h="500px"
         justify="space-between"
-        display={{ base: "none", md: "flex" }} // hide images on small screens
+        display={{ base: "none", md: "flex" }}
       >
-        {/* Top Left Image with notch + tilt */}
+        {/* Top Left Image */}
         <MotionBox
           w="280px"
           h="232px"
@@ -82,7 +85,7 @@ export const Snippet = () => {
         overflow="hidden"
         whileHover={{ scale: 1.04 }}
         transition={{ type: "spring", stiffness: 140 }}
-        display={{ base: "none", md: "block" }} // hide on small screens
+        display={{ base: "none", md: "block" }}
       >
         <img
           src="/image/about.webp"
@@ -93,21 +96,27 @@ export const Snippet = () => {
       </MotionBox>
 
       {/* Right text content */}
-      <Box flex="1" maxW={{ base: "100%", md: "600px" }} pl={plValue} textAlign={textAlign}>
+      <Box
+        flex="1"
+        maxW={{ base: "100%", md: "600px" }}
+        pl={plValue}
+        textAlign={textAlign}
+      >
         <Heading
           as="h3"
           size="lg"
-          mb={4}
+          mb={paragraphMargin}
           color="orange.400"
-          fontWeight="700" // slightly bolder
+          fontWeight="700"
         >
           Why Choose Us
         </Heading>
+
         <Text
           fontSize="md"
           color="gray.700"
           lineHeight="1.7"
-          mb={6}
+          mb={paragraphMargin}
           fontWeight="400"
         >
           Learn at your own pace with expert instructors who make learning engaging
@@ -116,26 +125,28 @@ export const Snippet = () => {
         </Text>
 
         <VStack spacing={4} align="stretch">
-          {[{
-            icon: FaChalkboardTeacher,
-            title: 'Expert Instructors',
-            desc: 'Learn from qualified and passionate teachers.',
-          },
-          {
-            icon: FaClock,
-            title: 'Flexible Learning',
-            desc: 'Study anytime, anywhere, at your own pace.',
-          },
-          {
-            icon: FaBookOpen,
-            title: 'Interactive Materials',
-            desc: 'Quizzes and projects to practice and retain knowledge.',
-          },
-          {
-            icon: FaGraduationCap,
-            title: 'Career Growth',
-            desc: 'Build strong foundations and advance with confidence.',
-          }].map(({ icon, title, desc }) => (
+          {[
+            {
+              icon: FaChalkboardTeacher,
+              title: 'Expert Instructors',
+              desc: 'Learn from qualified and passionate teachers.',
+            },
+            {
+              icon: FaClock,
+              title: 'Flexible Learning',
+              desc: 'Study anytime, anywhere, at your own pace.',
+            },
+            {
+              icon: FaBookOpen,
+              title: 'Interactive Materials',
+              desc: 'Quizzes and projects to practice and retain knowledge.',
+            },
+            {
+              icon: FaGraduationCap,
+              title: 'Career Growth',
+              desc: 'Build strong foundations and advance with confidence.',
+            }
+          ].map(({ icon, title, desc }) => (
             <MotionBox
               whileHover={{ scale: 1.03 }}
               transition={{ type: "spring", stiffness: 120 }}

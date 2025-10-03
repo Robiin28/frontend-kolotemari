@@ -21,7 +21,7 @@ export const TeamCardHome = () => {
 
           // Duplicate instructors if less than 4
           if (users.length === 2) users = [...users, ...users];
-          if (users.length === 3) users = [...users, ...users.slice(0,1)];
+          if (users.length === 3) users = [...users, ...users.slice(0, 1)];
 
           setInstructors(users);
         } else {
@@ -37,52 +37,57 @@ export const TeamCardHome = () => {
   }, []);
 
   if (loading)
-    return <Box textAlign="center" p={10}>Loading instructors...</Box>;
+    return (
+      <Box overflow="visible" textAlign="center" p={10}>
+        Loading instructors...
+      </Box>
+    );
   if (error)
-    return <Box color="red.500" textAlign="center" p={10}>Error: {error}</Box>;
+    return (
+      <Box overflow="visible" color="red.500" textAlign="center" p={10}>
+        Error: {error}
+      </Box>
+    );
 
   return (
-    <Box bg="white" py={10} position="relative" overflow="hidden">
-      <Box maxW={{ base: "80%", md: "70%" }} mx="auto" overflow="hidden" position="relative">
-        {/* Marquee */}
-        <Marquee
-          ref={marqueeRef}
-          speed={40}
-          gradient={false}
-          pauseOnHover={true}
-        >
+    <Box bg="white" py={10} position="relative" overflow="visible">
+     
+      <Box
+        maxW={{ base: "90%", md: "70%" }}
+        mx="auto"
+        overflow="hidden"
+        position="relative"
+        py={3}            
+      >
+        <Marquee speed={70} gradient={false} pauseOnHover style={{ overflow: "visible" }}>
           {instructors.map((inst, i) => (
             <Box
               key={`${inst._id}-${i}`}
               w={{ base: "280px", md: "330px" }}
-              h="380px"
+              minH="380px"
               flex="0 0 auto"
               borderRadius="lg"
-              boxShadow="0 6px 12px rgba(0,0,0,0.2)"
+              boxShadow="0 2px 6px rgba(0,0,0,0.15), 0 -2px 4px rgba(0,0,0,0.08)"
               bg="white"
               p={6}
               mx={4}
+              my={1}            // vertical margin to separate cards inside marquee
               textAlign="center"
               display="flex"
               flexDirection="column"
               alignItems="center"
               justifyContent="space-between"
-              borderTop="6px solid #a32622"
-              borderBottom="0.5px solid black"
+              borderTop="3px solid #a32622"
+            
               transition="transform 0.3s ease, box-shadow 0.3s ease"
-              sx={{
-                perspective: "1000px",
-                "&:nth-of-type(3)": {
-                  transform: "scale(1.08)",
-                  boxShadow: "0 8px 16px rgba(0,0,0,0.3)",
-                  borderTop: "6px solid #222",
-                },
-              }}
               _hover={{
                 transform: "translateY(-6px) rotateY(8deg) scale(1.05)",
-                boxShadow: "0 10px 20px rgba(0,0,0,0.4)",
-                border:"1px solid #a32622",
-              
+                borderTop: "1px solid #a32622",
+                borderBottom: "1px solid #a32622",
+                borderLeft: "1px solid #a32622",
+                borderRight: "1px solid #a32622",
+                zIndex: 1000,
+                position: "relative",
               }}
             >
               <Image
@@ -113,7 +118,7 @@ export const TeamCardHome = () => {
                 mb={3}
                 noOfLines={3}
                 textAlign="center"
-                px={2} // padding left and right
+                px={2}
                 lineHeight="1.7"
               >
                 {inst.bio || "Instructor"}

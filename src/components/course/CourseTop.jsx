@@ -23,16 +23,33 @@ const MotionBox = motion(Box);
 const CourseCard = ({ course, handleEnrollNow, handleAddToCart }) => {
   return (
     <MotionBox
-      maxW={{ base: "90vw", md: "465px" }}
+      maxW={{ base: "80vw", md: "465px" }}
       w="100%"
       bg="white"
       borderRadius="xl"
-      boxShadow="0 6px 12px rgba(0,0,0,0.15)"
+      boxShadow="0 4px 8px rgba(0,0,0,0.12)"
       overflow="hidden"
       display="flex"
       flexDirection="column"
       transition="all 0.4s ease"
-      whileHover={{ scale: 1.03, y: -8, boxShadow: "0 10px 25px rgba(0,0,0,0.25)" }}
+      position="relative"
+      whileHover={{
+        scale: 1.03,
+        y: -8,
+        boxShadow: "0 6px 16px rgba(0,0,0,0.18)",
+      }}
+      sx={{
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: "-10px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          borderLeft: "10px solid transparent",
+          borderRight: "10px solid transparent",
+          borderBottom: "10px solid white",
+        },
+      }}
       m={{ base: "auto", md: 0 }}
     >
       {/* Image */}
@@ -72,15 +89,17 @@ const CourseCard = ({ course, handleEnrollNow, handleAddToCart }) => {
         </Flex>
       </Box>
 
-      {/* Description */}
+      {/* Description (shown fully on hover) */}
       <Box
         p={{ base: 4, md: 6 }}
         flex="1"
-        maxH={{ base: "250px", md: "180px" }}
-        overflowY="auto"
+        maxH={{ base: "0px", md: "0px" }}
+        overflow="hidden"
         fontSize="sm"
         color="gray.700"
         lineHeight="1.7"
+        transition="all 0.4s ease"
+        _hover={{ maxH: { base: "250px", md: "180px" } }}
         sx={{
           "&::-webkit-scrollbar": { width: "6px" },
           "&::-webkit-scrollbar-thumb": {
@@ -90,7 +109,10 @@ const CourseCard = ({ course, handleEnrollNow, handleAddToCart }) => {
           "&::-webkit-scrollbar-track": { background: "#f1f1f1" },
         }}
       >
-        <Text style={{ paddingLeft: "4px", paddingRight: "4px" }} dangerouslySetInnerHTML={{ __html: course.description }} />
+        <Text
+          style={{ paddingLeft: "4px", paddingRight: "4px" }}
+          dangerouslySetInnerHTML={{ __html: course.description }}
+        />
       </Box>
 
       {/* Actions */}
@@ -289,7 +311,6 @@ export const CourseTop = () => {
     );
   }
 
-  // Show only 3 courses on small screens
   const displayedCourses = courses.slice(0, 3);
 
   return (

@@ -29,6 +29,7 @@ import PageNotFound from './components/PageNotFound';
 import {Snippet}  from './components/About/Snippet';
 import {SignPage} from './components/auth/Signpage';
 import {SignUpPage} from './components/auth/SignupPage';
+import StudentSuccessScroll from './components/home/StudentSucess';
 
 
 const App = () => {
@@ -81,6 +82,7 @@ const App = () => {
 
         {/* Auth routes */}
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/std" element={<StudentSuccessScroll />} />
         <Route path="/signin" element={<SignPage />} />
         <Route path="/validate" element={<AccountValidationPage />} />
         <Route path="/success" element={<SuccessMessagePage />} />

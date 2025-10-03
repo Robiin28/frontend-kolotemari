@@ -1,87 +1,145 @@
-import React from 'react';
-import './add.css'; // Make sure to import the CSS
-import { Box, Button, Heading, Input, FormControl, FormLabel } from '@chakra-ui/react';
+import React from "react";
+import { Box, Button, Heading, Input, FormControl, FormLabel, VStack } from "@chakra-ui/react";
 
 export const SignUpBox = () => {
   return (
-    <div className="containers">
-      <div className='headSign'>
-        <h1>Get your Training <span className='free'>for free</span></h1>
-      </div>
-      <div className="signBox">
-        <Heading as="h1" size="lg" marginBottom="20px">Sign Up Now</Heading>
+    <Box
+      position="relative"
+      height="94vh"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      backgroundImage="url('/image/students.jpg')"
+      backgroundSize="cover"
+      backgroundPosition="center"
+      backgroundRepeat="no-repeat"
+      px={{ base: 4, md: 20 }}
+    >
+      {/* Heading on top-left for md and up, visible on small screen inside form */}
+      <Box
+        display={{ base: "none", md: "block" }}
+        position="absolute"
+        top="30%"
+        left="18%"
+      >
+        <Heading as="h1" fontSize="40px" color="white" maxW="300px" lineHeight="1.2">
+          Get your Training <Box as="span" color="#eb6104">for free</Box>
+        </Heading>
+      </Box>
 
-        <FormControl isRequired position="relative" marginTop="20px">
-          <Input 
-            type="text" 
-            placeholder=" " 
-            size="lg" 
-            className="floating-input"
-          />
-          <FormLabel className="floating-label">What's your name...</FormLabel>
-        </FormControl>
+      {/* For small screens: show the note above the form */}
+      <Box
+        display={{ base: "block", md: "none" }}
+        mb={4}
+        position="relative"
+        textAlign="center"
+        w="full"
+        px={4}
+      >
+        <Heading as="h1" fontSize="28px" color="white" lineHeight="1.2">
+          Get your Training <Box as="span" color="#eb6104">for free</Box>
+        </Heading>
+      </Box>
 
-        <FormControl isRequired position="relative" marginTop="0">
-          <Input 
-            type="email" 
-            placeholder=" " 
-            size="lg" 
-            className="floating-input"
-          />
-          <FormLabel className="floating-label">What's your email...</FormLabel>
-        </FormControl>
+      {/* Sign up form box */}
+      <Box
+        bg="white"
+        p={{ base: 4, md: 8 }}
+        borderRadius="md"
+        boxShadow="0 6px 12px rgba(0,0,0,0.15)"
+        textAlign="center"
+        maxW={{ base: "400px", md: "400px" }}
+        w={{ base: "100%", md: "90%" }}
+        position={{ base: "static", md: "absolute" }}
+        right={{ base: "auto", md: "10%" }}
+      >
+        {/* Small screen note shown inside form only on base */}
+        <Box display={{ base: "none", md: "block" }} mb={6} />
 
-        <FormControl isRequired position="relative" marginTop="10px">
-          <Input 
-            type="tel" 
-            placeholder=" " 
-            size="lg" 
-            className="floating-input"
-          />
-          <FormLabel className="floating-label">What's your phone...</FormLabel>
-        </FormControl>
+        <Heading as="h2" fontSize={{ base: "1.6rem", md: "2rem" }} mb="20px">
+          Sign Up Now
+        </Heading>
 
-        <Button 
-          type="submit" 
-          colorScheme="orange" 
-          width="100%" 
-          marginTop="20px"
-          size="lg"
-        >
-          Get In!
-        </Button>
-      </div>
-      <style jsx>{`
-        .floating-label {
-          position: absolute;
-          left: 15px;
-          top: 12px;
-          color: #888;
-          transition: 0.2s ease all;
-          pointer-events: none;
-        }
+        <VStack spacing={4} align="stretch">
+          <FormControl isRequired position="relative">
+            <Input
+              placeholder=" "
+              size="lg"
+              borderColor="#201f1f"
+              _focus={{ borderColor: "#eb6104", boxShadow: "0 0 5px rgba(235,97,4,0.5)" }}
+              borderRadius="md"
+              pt="24px"
+              pb="10px"
+            />
+            <FormLabel
+              position="absolute"
+              left="15px"
+              top="12px"
+              color="#888"
+              pointerEvents="none"
+              _focus={{ color: "#eb6104" }}
+              sx={{ transition: "0.2s ease all" }}
+            >
+              What's your name...
+            </FormLabel>
+          </FormControl>
 
-        .floating-input:focus + .floating-label,
-        .floating-input:not(:placeholder-shown) + .floating-label {
-          top: -10px;
-          left: 15px;
-          font-size: 12px;
-          color: #eb6104;
-        }
+          <FormControl isRequired position="relative">
+            <Input
+              placeholder=" "
+              size="lg"
+              borderColor="#201f1f"
+              _focus={{ borderColor: "#eb6104", boxShadow: "0 0 5px rgba(235,97,4,0.5)" }}
+              borderRadius="md"
+              pt="24px"
+              pb="10px"
+            />
+            <FormLabel
+              position="absolute"
+              left="15px"
+              top="12px"
+              color="#888"
+              pointerEvents="none"
+              _focus={{ color: "#eb6104" }}
+              sx={{ transition: "0.2s ease all" }}
+            >
+              What's your email...
+            </FormLabel>
+          </FormControl>
 
-        .floating-input {
-          padding: 24px 15px 10px; /* Adjust padding for label positioning */
-          border: 1px solid #201f1f;
-          border-radius: 4px;
-          transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transition for border color and shadow */
-        }
+          <FormControl isRequired position="relative">
+            <Input
+              placeholder=" "
+              size="lg"
+              borderColor="#201f1f"
+              _focus={{ borderColor: "#eb6104", boxShadow: "0 0 5px rgba(235,97,4,0.5)" }}
+              borderRadius="md"
+              pt="24px"
+              pb="10px"
+            />
+            <FormLabel
+              position="absolute"
+              left="15px"
+              top="12px"
+              color="#888"
+              pointerEvents="none"
+              _focus={{ color: "#eb6104" }}
+              sx={{ transition: "0.2s ease all" }}
+            >
+              What's your phone...
+            </FormLabel>
+          </FormControl>
 
-        .floating-input:focus {
-          border-color: #eb6104;
-          outline: none;
-          box-shadow: 0 0 5px rgba(235, 97, 4, 0.5); /* Subtle shadow on focus */
-        }
-      `}</style>
-    </div>
+          <Button
+            colorScheme="orange"
+            size="lg"
+            mt="10px"
+            borderRadius="22px"
+          >
+            Get In!
+          </Button>
+        </VStack>
+      </Box>
+    </Box>
   );
-}
+};

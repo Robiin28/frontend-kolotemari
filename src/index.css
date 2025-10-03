@@ -117,3 +117,8 @@ html, body {
   padding: 0 10px; /* optional padding inside screen */
 }
 
+/* TeamCardHome.css */
+
+.marquee-container > div:first-child {
+  overflow: visible !important;
+}
