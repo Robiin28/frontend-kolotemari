@@ -1,7 +1,7 @@
 /* Home Page Styles */
 .home-container{
   background-color: #121212;
-   height: auto;  
+   height: 80vh;  
 }
 
 
@@ -131,11 +131,19 @@
     right: 3px;
   }
 
-  .home-container .triangle {
-    border-bottom: 62vh solid rgb(255, 255, 255);
-    border-left: 62vh solid transparent;
-  }
-
+  /* .home-container .triangle {
+    border-bottom: 100vh solid rgb(255, 255, 255);
+    border-left: 160vh solid transparent;
+  } */
+.home-container .triangle {
+  position: absolute;
+  top: 8vh;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-bottom: 78vh solid #fff;
+  border-left: 103vh solid transparent;
+}
   .home-container .headHome {
     top: 32vh;
     left: 5vh;
@@ -248,4 +256,32 @@
     font-size: 15px;
     padding: 15px 16px;
   }
+}
+/* Medium and large screens */
+@media (min-width: 769px) and (max-width: 1023px) {
+ 
+
+  .home-container .headHome h1 {
+    font-size: 50px; /* Larger heading */
+    line-height: 1.1;
+  }
+
+ 
+  
+ 
+  .home-container .button-group {
+    position: absolute;
+    top: 70vh; /* Keep below heading */
+    left: 1vw;
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+  }
+
+  .home-container .button-group button {
+    font-size: 12px;
+    padding: 10px 20px;
+    border-radius: 10px 0 0 30px; /* First button left curve */
+  }
+
 }
