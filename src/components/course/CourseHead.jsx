@@ -4,7 +4,7 @@ import Title from '../common/title/title';
 export const CourseHead = () => {
   return (
     <>
-         <Title title='our Courses' />
+         <Title title='Courses' />
     </>
   )
 }
